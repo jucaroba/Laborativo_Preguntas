@@ -8,12 +8,7 @@ import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant } from '@/types'
 import QRCode from 'react-qr-code'
 
-const OPTION_COLORS = {
-  a: { bg: '#1D4ED8', label: 'A' },
-  b: { bg: '#B91C1C', label: 'B' },
-  c: { bg: '#15803D', label: 'C' },
-  d: { bg: '#D97706', label: 'D' },
-}
+import { OPTION_COLORS } from '@/lib/theme'
 
 function ScreenContent() {
   const searchParams = useSearchParams()

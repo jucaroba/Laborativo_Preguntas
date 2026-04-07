@@ -7,12 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant, AnswerOption } from '@/types'
 
-const OPTION_COLORS: Record<string, { bg: string; label: string }> = {
-  a: { bg: '#1D4ED8', label: 'A' },
-  b: { bg: '#B91C1C', label: 'B' },
-  c: { bg: '#15803D', label: 'C' },
-  d: { bg: '#D97706', label: 'D' },
-}
+import { OPTION_COLORS } from '@/lib/theme'
 
 export default function PlayPage() {
   const params = useParams()
