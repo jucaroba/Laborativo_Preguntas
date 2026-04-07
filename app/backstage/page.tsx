@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant, Answer } from '@/types'
 import { ChevronRight, BarChart2, Users, Trophy, Play, Check } from 'lucide-react'
+import { OPTION_COLORS } from '@/lib/theme'
 
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' }
 const OPTION_COLORS: Record<string, string> = { a: '#1D4ED8', b: '#B91C1C', c: '#15803D', d: '#D97706' }
@@ -153,7 +154,8 @@ function BackstageContent() {
               <button
                 onClick={handleShowResults}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white bg-amber-500 hover:bg-amber-400 disabled:opacity-40"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40"
+                style={{ background: OPTION_COLORS.a.bg }}
               >
                 <BarChart2 size={16} /> Mostrar resultados
               </button>
