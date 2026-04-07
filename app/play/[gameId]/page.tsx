@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
@@ -205,7 +207,7 @@ export default function PlayPage() {
                 {isCorrect ? '¡Correcto!' : 'Incorrecto'}
               </p>
               <p className="text-sm text-gray-500">
-                La respuesta correcta era: <strong>{(currentQuestion as Record<string, string>)[`option_${currentQuestion.correct_answer}`]}</strong>
+                La respuesta correcta era: <strong>{(currentQuestion as unknown as Record<string, string>)[`option_${currentQuestion.correct_answer}`]}</strong>
               </p>
             </div>
           ) : (
@@ -213,7 +215,7 @@ export default function PlayPage() {
               <span className="text-4xl">⏰</span>
               <p className="text-gray-500 mt-2">No respondiste a tiempo</p>
               <p className="text-sm text-gray-400 mt-1">
-                La respuesta era: <strong>{(currentQuestion as Record<string, string>)[`option_${currentQuestion.correct_answer}`]}</strong>
+                La respuesta era: <strong>{(currentQuestion as unknown as Record<string, string>)[`option_${currentQuestion.correct_answer}`]}</strong>
               </p>
             </div>
           )}
@@ -258,7 +260,7 @@ export default function PlayPage() {
           <div className="flex-1 space-y-3">
             {(['a', 'b', 'c', 'd'] as const).map(opt => {
               const color = OPTION_COLORS[opt]
-              const optText = (currentQuestion as Record<string, string>)[`option_${opt}`]
+              const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
               const isSelected = myAnswer === opt
               return (
                 <div
@@ -293,7 +295,7 @@ export default function PlayPage() {
           <div className="flex-1 space-y-3">
             {(['a', 'b', 'c', 'd'] as const).map(opt => {
               const color = OPTION_COLORS[opt]
-              const optText = (currentQuestion as Record<string, string>)[`option_${opt}`]
+              const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
               return (
                 <button
                   key={opt}

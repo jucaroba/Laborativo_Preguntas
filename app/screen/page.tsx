@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
@@ -223,7 +225,7 @@ function ScreenContent() {
             const count = answerCounts[opt] || 0
             const pct = totalAnswers > 0 ? (count / totalAnswers) * 100 : 0
             const isCorrect = currentQuestion.correct_answer === opt
-            const optText = (currentQuestion as Record<string, string>)[`option_${opt}`]
+            const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
 
             return (
               <div key={opt} className="relative">
@@ -300,7 +302,7 @@ function ScreenContent() {
         <div className="grid grid-cols-2 gap-4">
           {(['a', 'b', 'c', 'd'] as const).map(opt => {
             const color = OPTION_COLORS[opt]
-            const optText = (currentQuestion as Record<string, string>)[`option_${opt}`]
+            const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
             return (
               <div
                 key={opt}

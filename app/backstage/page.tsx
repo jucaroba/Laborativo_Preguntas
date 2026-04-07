@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
@@ -214,7 +216,7 @@ function BackstageContent() {
                 {(['a', 'b', 'c', 'd'] as const).map(opt => {
                   const isCorrect = currentQuestion.correct_answer === opt
                   const count = answerCountsByOption[opt] || 0
-                  const optText = (currentQuestion as Record<string, string>)[`option_${opt}`]
+                  const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
                   return (
                     <div
                       key={opt}

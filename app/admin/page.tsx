@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question } from '@/types'
@@ -307,7 +309,7 @@ export default function AdminPage() {
                         <input
                           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
                           placeholder={`Opción ${OPTION_LABELS[opt]}`}
-                          value={(editingQ as Record<string, string>)[`option_${opt}`] || ''}
+                          value={(editingQ as unknown as Record<string, string>)[`option_${opt}`] || ''}
                           onChange={e => setEditingQ({ ...editingQ, [`option_${opt}`]: e.target.value })}
                         />
                       </div>
@@ -383,7 +385,7 @@ export default function AdminPage() {
                               }`}
                             >
                               <span className="font-bold">{OPTION_LABELS[opt]}.</span>
-                              <span className="truncate">{(q as Record<string, string>)[`option_${opt}`]}</span>
+                              <span className="truncate">{(q as unknown as Record<string, string>)[`option_${opt}`]}</span>
                               {q.correct_answer === opt && <Check size={12} className="flex-shrink-0 text-green-600" />}
                             </div>
                           ))}
