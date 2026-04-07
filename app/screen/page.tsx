@@ -257,11 +257,9 @@ function ScreenContent() {
         </div>
       </div>
 
-      <div className="flex-1 flex items-center">
-        <h2 className="text-5xl font-black text-gray-900 leading-tight max-w-5xl">{currentQuestion.text}</h2>
-      </div>
+      <h2 className="text-5xl font-black text-gray-900 leading-tight max-w-5xl mb-8">{currentQuestion.text}</h2>
 
-      <div className="grid grid-cols-2 gap-4 mt-8">
+      <div className="grid grid-cols-2 gap-4">
         {(['a', 'b', 'c', 'd'] as const).map(opt => {
           const color = OPTION_COLORS[opt]
           const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
