@@ -10,7 +10,6 @@ import { ChevronRight, BarChart2, Users, Trophy, Play, Check } from 'lucide-reac
 import { OPTION_COLORS } from '@/lib/theme'
 
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' }
-const OPTION_COLORS: Record<string, string> = { a: '#1D4ED8', b: '#B91C1C', c: '#15803D', d: '#D97706' }
 
 function BackstageContent() {
   const searchParams = useSearchParams()
@@ -197,7 +196,7 @@ function BackstageContent() {
                   const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
                   return (
                     <div key={opt} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-200'}`}>
-                      <span className="font-bold w-4" style={{ color: isCorrect ? '#059669' : OPTION_COLORS[opt] }}>{OPTION_LABELS[opt]}</span>
+                      <span className="font-bold w-4" style={{ color: isCorrect ? '#059669' : OPTION_COLORS[opt as keyof typeof OPTION_COLORS]?.bg }}>{OPTION_LABELS[opt]}</span>
                       <span className={`flex-1 truncate ${isCorrect ? 'text-green-700 font-medium' : 'text-gray-600'}`}>{optText}</span>
                       {isCorrect && <Check size={12} className="text-green-600" />}
                       <span className="font-bold text-gray-500">{count}</span>
