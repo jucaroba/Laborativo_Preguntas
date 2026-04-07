@@ -132,14 +132,10 @@ function ScreenContent() {
     return (
       <div className="min-h-screen bg-[#0D0D1A] flex flex-col items-center justify-center text-white">
         {/* Logo */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: '#6204BF' }}>
-            <span className="text-white font-black text-2xl">L</span>
-          </div>
-          <div>
-            <span className="text-3xl font-black tracking-tight">Laborativo</span>
-            <p className="text-sm" style={{ color: '#A78BFA' }}>{game.name}</p>
-          </div>
+        <div className="flex flex-col items-center mb-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain mb-3" />
+          <p className="text-xl font-semibold" style={{ color: '#A78BFA' }}>{game.name}</p>
         </div>
 
         {/* QR */}
@@ -147,8 +143,7 @@ function ScreenContent() {
           <QRCode value={joinUrl} size={240} />
         </div>
 
-        <p className="text-2xl font-bold mb-2">Escanea para unirte</p>
-        <p className="text-sm font-mono mb-10" style={{ color: '#6B7280' }}>{joinUrl}</p>
+        <p className="text-2xl font-bold mb-10">Escanea para unirte</p>
 
         {participants.length > 0 && (
           <div className="text-center">
