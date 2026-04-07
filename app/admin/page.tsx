@@ -292,131 +292,197 @@ export default function AdminPage() {
                 </button>
               </div>
 
-              {/* Edit / New question form */}
-              {editingQ && (
-                <div ref={editFormRef} className="bg-white border-2 rounded-xl p-5 mb-4" style={{ borderColor: '#6204BF' }}>
-                  <h4 className="font-semibold text-gray-900 mb-4">{isNewQ ? 'Nueva pregunta' : 'Editar pregunta'}</h4>
-
-                  <div className="mb-4">
-                    <label className="block text-xs font-semibold text-gray-500 mb-1">Pregunta</label>
-                    <textarea
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
-                      rows={3}
-                      placeholder="Escribe la pregunta aquí..."
-                      value={editingQ.text || ''}
-                      onChange={e => setEditingQ({ ...editingQ, text: e.target.value })}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    {(['a', 'b', 'c', 'd'] as const).map(opt => (
-                      <div key={opt}>
-                        <label className="block text-xs font-semibold text-gray-500 mb-1">
-                          Opción {OPTION_LABELS[opt]}
-                        </label>
-                        <input
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
-                          placeholder={`Opción ${OPTION_LABELS[opt]}`}
-                          value={(editingQ as unknown as Record<string, string>)[`option_${opt}`] || ''}
-                          onChange={e => setEditingQ({ ...editingQ, [`option_${opt}`]: e.target.value })}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mb-5">
-                    <label className="block text-xs font-semibold text-gray-500 mb-2">Respuesta correcta</label>
-                    <div className="flex gap-2">
-                      {(['a', 'b', 'c', 'd'] as const).map(opt => (
-                        <button
-                          key={opt}
-                          onClick={() => setEditingQ({ ...editingQ, correct_answer: opt })}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold border-2 transition-colors ${
-                            editingQ.correct_answer === opt
-                              ? 'text-white border-transparent'
-                              : 'text-gray-600 border-gray-200 hover:border-gray-300'
-                          }`}
-                          style={editingQ.correct_answer === opt ? { background: '#059669', borderColor: '#059669' } : {}}
-                        >
-                          {OPTION_LABELS[opt]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 justify-end">
-                    <button
-                      onClick={() => { setEditingQ(null); setIsNewQ(false) }}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
-                    >
-                      <X size={14} /> Cancelar
-                    </button>
-                    <button
-                      onClick={saveQuestion}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-medium"
-                      style={{ background: '#059669' }}
-                    >
-                      <Check size={14} /> Guardar
-                    </button>
-                  </div>
-                </div>
-              )}
-
               {/* Question list */}
               <div className="space-y-3">
                 {questions.map((q, idx) => (
-                  <div key={q.id} className="bg-white border border-gray-200 rounded-xl p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="flex flex-col gap-0.5 pt-1">
-                        <button onClick={() => moveQuestion(idx, 'up')} disabled={idx === 0} className="text-gray-300 hover:text-gray-600 disabled:opacity-20">
-                          <ChevronUp size={16} />
-                        </button>
-                        <button onClick={() => moveQuestion(idx, 'down')} disabled={idx === questions.length - 1} className="text-gray-300 hover:text-gray-600 disabled:opacity-20">
-                          <ChevronDown size={16} />
-                        </button>
-                      </div>
+                  <div key={q.id}>
+                    <div className={`bg-white border rounded-xl p-4 ${editingQ?.id === q.id ? 'border-purple-300' : 'border-gray-200'}`}>
+                      <div className="flex items-start gap-3">
+                        <div className="flex flex-col gap-0.5 pt-1">
+                          <button onClick={() => moveQuestion(idx, 'up')} disabled={idx === 0} className="text-gray-300 hover:text-gray-600 disabled:opacity-20">
+                            <ChevronUp size={16} />
+                          </button>
+                          <button onClick={() => moveQuestion(idx, 'down')} disabled={idx === questions.length - 1} className="text-gray-300 hover:text-gray-600 disabled:opacity-20">
+                            <ChevronDown size={16} />
+                          </button>
+                        </div>
 
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: '#6204BF' }}>
-                        {idx + 1}
-                      </div>
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: '#6204BF' }}>
+                          {idx + 1}
+                        </div>
 
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 mb-2">{q.text}</p>
-                        <div className="grid grid-cols-2 gap-1.5">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 mb-2">{q.text}</p>
+                          <div className="grid grid-cols-2 gap-1.5">
+                            {(['a', 'b', 'c', 'd'] as const).map(opt => (
+                              <div
+                                key={opt}
+                                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs ${
+                                  q.correct_answer === opt
+                                    ? 'bg-green-50 text-green-700 font-semibold'
+                                    : 'bg-gray-50 text-gray-600'
+                                }`}
+                              >
+                                <span className="font-bold">{OPTION_LABELS[opt]}.</span>
+                                <span className="truncate">{(q as unknown as Record<string, string>)[`option_${opt}`]}</span>
+                                {q.correct_answer === opt && <Check size={12} className="flex-shrink-0 text-green-600" />}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="flex gap-1 flex-shrink-0">
+                          <button
+                            onClick={() => { setEditingQ(q); setIsNewQ(false) }}
+                            className={`p-1.5 rounded-lg ${editingQ?.id === q.id ? 'text-purple-600 bg-purple-50' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'}`}
+                          >
+                            <Edit2 size={15} />
+                          </button>
+                          <button
+                            onClick={() => deleteQuestion(q.id)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Edit form inline */}
+                    {editingQ && !isNewQ && editingQ.id === q.id && (
+                      <div ref={editFormRef} className="mt-2 bg-white border-2 rounded-xl p-5" style={{ borderColor: '#6204BF' }}>
+                        <h4 className="font-semibold text-gray-900 mb-4">Editar pregunta</h4>
+
+                        <div className="mb-4">
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">Pregunta</label>
+                          <textarea
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
+                            rows={3}
+                            value={editingQ.text || ''}
+                            onChange={e => setEditingQ({ ...editingQ, text: e.target.value })}
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 mb-4">
                           {(['a', 'b', 'c', 'd'] as const).map(opt => (
-                            <div
-                              key={opt}
-                              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs ${
-                                q.correct_answer === opt
-                                  ? 'bg-green-50 text-green-700 font-semibold'
-                                  : 'bg-gray-50 text-gray-600'
-                              }`}
-                            >
-                              <span className="font-bold">{OPTION_LABELS[opt]}.</span>
-                              <span className="truncate">{(q as unknown as Record<string, string>)[`option_${opt}`]}</span>
-                              {q.correct_answer === opt && <Check size={12} className="flex-shrink-0 text-green-600" />}
+                            <div key={opt}>
+                              <label className="block text-xs font-semibold text-gray-500 mb-1">Opción {OPTION_LABELS[opt]}</label>
+                              <input
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                                value={(editingQ as unknown as Record<string, string>)[`option_${opt}`] || ''}
+                                onChange={e => setEditingQ({ ...editingQ, [`option_${opt}`]: e.target.value })}
+                              />
                             </div>
                           ))}
                         </div>
-                      </div>
 
-                      <div className="flex gap-1 flex-shrink-0">
-                        <button
-                          onClick={() => { setEditingQ(q); setIsNewQ(false) }}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100"
-                        >
-                          <Edit2 size={15} />
-                        </button>
-                        <button
-                          onClick={() => deleteQuestion(q.id)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50"
-                        >
-                          <Trash2 size={15} />
-                        </button>
+                        <div className="mb-5">
+                          <label className="block text-xs font-semibold text-gray-500 mb-2">Respuesta correcta</label>
+                          <div className="flex gap-2">
+                            {(['a', 'b', 'c', 'd'] as const).map(opt => (
+                              <button
+                                key={opt}
+                                onClick={() => setEditingQ({ ...editingQ, correct_answer: opt })}
+                                className={`px-4 py-2 rounded-lg text-sm font-bold border-2 transition-colors ${
+                                  editingQ.correct_answer === opt
+                                    ? 'text-white border-transparent'
+                                    : 'text-gray-600 border-gray-200 hover:border-gray-300'
+                                }`}
+                                style={editingQ.correct_answer === opt ? { background: '#059669', borderColor: '#059669' } : {}}
+                              >
+                                {OPTION_LABELS[opt]}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => { setEditingQ(null); setIsNewQ(false) }}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
+                          >
+                            <X size={14} /> Cancelar
+                          </button>
+                          <button
+                            onClick={saveQuestion}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-medium"
+                            style={{ background: '#059669' }}
+                          >
+                            <Check size={14} /> Guardar
+                          </button>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ))}
+
+                {/* New question form — al final de la lista */}
+                {editingQ && isNewQ && (
+                  <div ref={editFormRef} className="bg-white border-2 rounded-xl p-5" style={{ borderColor: '#6204BF' }}>
+                    <h4 className="font-semibold text-gray-900 mb-4">Nueva pregunta</h4>
+
+                    <div className="mb-4">
+                      <label className="block text-xs font-semibold text-gray-500 mb-1">Pregunta</label>
+                      <textarea
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
+                        rows={3}
+                        placeholder="Escribe la pregunta aquí..."
+                        value={editingQ.text || ''}
+                        onChange={e => setEditingQ({ ...editingQ, text: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      {(['a', 'b', 'c', 'd'] as const).map(opt => (
+                        <div key={opt}>
+                          <label className="block text-xs font-semibold text-gray-500 mb-1">Opción {OPTION_LABELS[opt]}</label>
+                          <input
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                            placeholder={`Opción ${OPTION_LABELS[opt]}`}
+                            value={(editingQ as unknown as Record<string, string>)[`option_${opt}`] || ''}
+                            onChange={e => setEditingQ({ ...editingQ, [`option_${opt}`]: e.target.value })}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mb-5">
+                      <label className="block text-xs font-semibold text-gray-500 mb-2">Respuesta correcta</label>
+                      <div className="flex gap-2">
+                        {(['a', 'b', 'c', 'd'] as const).map(opt => (
+                          <button
+                            key={opt}
+                            onClick={() => setEditingQ({ ...editingQ, correct_answer: opt })}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold border-2 transition-colors ${
+                              editingQ.correct_answer === opt
+                                ? 'text-white border-transparent'
+                                : 'text-gray-600 border-gray-200 hover:border-gray-300'
+                            }`}
+                            style={editingQ.correct_answer === opt ? { background: '#059669', borderColor: '#059669' } : {}}
+                          >
+                            {OPTION_LABELS[opt]}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={() => { setEditingQ(null); setIsNewQ(false) }}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50"
+                      >
+                        <X size={14} /> Cancelar
+                      </button>
+                      <button
+                        onClick={saveQuestion}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-medium"
+                        style={{ background: '#059669' }}
+                      >
+                        <Check size={14} /> Guardar
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {questions.length === 0 && !editingQ && (
                   <div className="text-center py-12 text-gray-400">
