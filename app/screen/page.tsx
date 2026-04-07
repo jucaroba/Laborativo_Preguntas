@@ -257,7 +257,8 @@ function ScreenContent() {
         </div>
       </div>
 
-      <h2 className="text-5xl font-black text-gray-900 leading-tight max-w-5xl mb-8">{currentQuestion.text}</h2>
+      <div className="flex-1 flex flex-col justify-center">
+        <h2 className="text-5xl font-black text-gray-900 leading-tight max-w-5xl mb-10">{currentQuestion.text}</h2>
 
       <div className="grid grid-cols-2 gap-4">
         {(['a', 'b', 'c', 'd'] as const).map(opt => {
@@ -272,6 +273,7 @@ function ScreenContent() {
             </div>
           )
         })}
+      </div>
       </div>
     </div>
   )
