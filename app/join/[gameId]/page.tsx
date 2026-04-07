@@ -20,14 +20,27 @@ export default function JoinPage() {
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    const existingId = localStorage.getItem(`participant_${gameId}`)
-    if (existingId) { router.replace(`/play/${gameId}`); return }
-    async function loadGame() {
+    async function init() {
+      const existingId = localStorage.getItem(`participant_${gameId}`)
+      if (existingId) {
+        // Verificar que el participante aún existe (si el juego fue reiniciado, fue borrado)
+        const { data: participant } = await supabase
+          .from('participants')
+          .select('id')
+          .eq('id', existingId)
+          .single()
+        if (participant) {
+          router.replace(`/play/${gameId}`)
+          return
+        }
+        // No existe — limpiar localStorage y pedir nombre de nuevo
+        localStorage.removeItem(`participant_${gameId}`)
+      }
       const { data } = await supabase.from('games').select('*').eq('id', gameId).single()
       if (data) setGame(data)
       setChecking(false)
     }
-    loadGame()
+    init()
   }, [gameId, router])
 
   async function handleJoin(e: React.FormEvent) {
