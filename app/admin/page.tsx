@@ -100,9 +100,10 @@ export default function AdminPage() {
         .single()
       if (data) setQuestions([...questions, data])
     } else {
+      const { text, option_a, option_b, option_c, option_d, correct_answer } = editingQ
       const { data } = await supabase
         .from('questions')
-        .update(editingQ)
+        .update({ text, option_a, option_b, option_c, option_d, correct_answer })
         .eq('id', editingQ.id)
         .select()
         .single()
