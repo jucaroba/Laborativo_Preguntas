@@ -290,14 +290,9 @@ function BackstageContent() {
             </p>
             <div className="space-y-2">
               {participants.map((p, idx) => (
-                <div key={p.id} className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${
-                  idx === 0 ? 'border-yellow-200 bg-yellow-50' :
-                  idx === 1 ? 'border-gray-200 bg-gray-50' :
-                  idx === 2 ? 'border-orange-100 bg-orange-50' :
-                  'border-gray-100 bg-white'
-                }`}>
+                <div key={p.id} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-100 bg-white">
                   <span className="font-bold w-6 text-center text-sm text-gray-400">
-                    {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
+                    {idx + 1}
                   </span>
                   <span className="flex-1 font-medium text-gray-900">{p.name} {p.last_name}</span>
                   {currentQuestion && (
