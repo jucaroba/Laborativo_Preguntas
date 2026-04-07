@@ -103,23 +103,23 @@ function ScreenContent() {
 
   // ── FINALIZADO ──────────────────────────────────────────────────────────────
   if (game.status === 'finished') return (
-    <div className="min-h-screen bg-[#0D0D1A] flex flex-col items-center justify-center text-white px-12">
-      <div className="text-7xl mb-6">🏆</div>
-      <h1 className="text-5xl font-black mb-2">¡Resultados finales!</h1>
-      <p className="mb-12 text-lg" style={{ color: '#A78BFA' }}>{game.name}</p>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-12">
+      <div className="text-7xl mb-4">🏆</div>
+      <h1 className="text-5xl font-black text-gray-900 mb-2">¡Resultados finales!</h1>
+      <p className="mb-10 text-lg font-semibold" style={{ color: '#6204BF' }}>{game.name}</p>
       <div className="w-full max-w-lg space-y-3">
         {participants.slice(0, 10).map((p, idx) => (
           <div key={p.id} className={`flex items-center gap-4 px-6 py-4 rounded-2xl border ${
-            idx === 0 ? 'border-yellow-500/40 bg-yellow-500/10' :
-            idx === 1 ? 'border-gray-400/30 bg-gray-400/10' :
-            idx === 2 ? 'border-amber-700/30 bg-amber-700/10' :
-            'border-white/10 bg-white/5'
+            idx === 0 ? 'border-yellow-300 bg-yellow-50' :
+            idx === 1 ? 'border-gray-300 bg-gray-100' :
+            idx === 2 ? 'border-orange-200 bg-orange-50' :
+            'border-gray-200 bg-white'
           }`}>
             <span className="text-2xl font-black w-8 text-center">
               {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
             </span>
-            <span className="flex-1 text-xl font-semibold">{p.name} {p.last_name}</span>
-            <span className="text-2xl font-black" style={{ color: '#A78BFA' }}>{p.score} pts</span>
+            <span className="flex-1 text-xl font-semibold text-gray-900">{p.name} {p.last_name}</span>
+            <span className="text-2xl font-black" style={{ color: '#6204BF' }}>{p.score} pts</span>
           </div>
         ))}
       </div>
@@ -163,26 +163,42 @@ function ScreenContent() {
     )
   }
 
+  // Header compartido para pantallas de pregunta
+  const ScreenHeader = () => (
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" />
+        <span className="font-semibold text-white/50 text-sm">
+          Pregunta {game.current_question_index + 1} / {questions.length}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse" />
+        <span className="text-white/50 text-sm">{totalAnswers} respondieron</span>
+      </div>
+    </div>
+  )
+
   // ── RESULTADOS de pregunta ──────────────────────────────────────────────────
   if (game.show_results && currentQuestion) {
-    const maxCount = Math.max(...Object.values(answerCounts), 1)
     return (
-      <div className="min-h-screen bg-[#0D0D1A] text-white flex flex-col px-14 py-12">
+      <div className="min-h-screen bg-gray-50 flex flex-col px-14 py-10">
+        {/* Header claro */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#6204BF' }}>
-              <span className="text-white font-black">L</span>
-            </div>
-            <span className="font-semibold" style={{ color: '#A78BFA' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'invert(1) brightness(0) saturate(100%) invert(13%) sepia(85%) saturate(5000%) hue-rotate(265deg) brightness(70%)' }} />
+            <span className="font-semibold text-gray-400 text-sm">
               Pregunta {game.current_question_index + 1} / {questions.length}
             </span>
           </div>
-          <span style={{ color: '#6B7280' }}>{totalAnswers} respuestas</span>
+          <span className="text-gray-400 text-sm">{totalAnswers} respuestas</span>
         </div>
 
-        <h2 className="text-4xl font-black mb-10 leading-tight max-w-4xl">{currentQuestion.text}</h2>
+        <h2 className="text-4xl font-black text-gray-900 mb-8 leading-tight max-w-4xl">{currentQuestion.text}</h2>
 
-        <div className="space-y-4 flex-1">
+        <div className="space-y-3 flex-1">
           {(['a', 'b', 'c', 'd'] as const).map(opt => {
             const color = OPTION_COLORS[opt]
             const count = answerCounts[opt] || 0
@@ -191,21 +207,21 @@ function ScreenContent() {
             const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
             return (
               <div key={opt} className="relative rounded-2xl overflow-hidden border-2" style={{
-                borderColor: isCorrect ? '#10B981' : color.bg + '50',
-                background: isCorrect ? '#10B98110' : color.bg + '12',
+                borderColor: isCorrect ? '#10B981' : '#E5E7EB',
+                background: isCorrect ? '#F0FDF4' : 'white',
               }}>
-                <div className="absolute left-0 top-0 bottom-0 transition-all duration-700 rounded-2xl"
-                  style={{ width: `${pct}%`, background: isCorrect ? '#10B98125' : color.bg + '25' }} />
-                <div className="relative flex items-center gap-4 px-6 py-5">
+                <div className="absolute left-0 top-0 bottom-0 transition-all duration-700"
+                  style={{ width: `${pct}%`, background: isCorrect ? '#10B98120' : color.bg + '15' }} />
+                <div className="relative flex items-center gap-4 px-6 py-4">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-lg flex-shrink-0"
                     style={{ background: isCorrect ? '#10B981' : color.bg }}>
                     {color.label}
                   </div>
-                  <span className="flex-1 text-xl font-semibold">{optText}</span>
+                  <span className={`flex-1 text-xl font-semibold ${isCorrect ? 'text-green-800' : 'text-gray-900'}`}>{optText}</span>
                   <div className="flex items-center gap-3">
                     {isCorrect && <span className="text-2xl">✅</span>}
                     <span className="text-2xl font-black" style={{ color: isCorrect ? '#10B981' : color.bg }}>{count}</span>
-                    <span className="text-sm w-10 text-right" style={{ color: '#6B7280' }}>{Math.round(pct)}%</span>
+                    <span className="text-sm text-gray-400 w-10 text-right">{Math.round(pct)}%</span>
                   </div>
                 </div>
               </div>
@@ -214,13 +230,13 @@ function ScreenContent() {
         </div>
 
         {/* Mini leaderboard */}
-        <div className="mt-8 pt-6 border-t border-white/10">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#A78BFA' }}>Puntaje actual</p>
+        <div className="mt-6 pt-5 border-t border-gray-200">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Puntaje actual</p>
           <div className="flex gap-6">
-            {participants.slice(0, 8).map((p, idx) => (
+            {participants.slice(0, 8).map((p) => (
               <div key={p.id} className="text-center">
-                <div className="text-xl font-black" style={{ color: '#A78BFA' }}>{p.score}</div>
-                <div className="text-xs max-w-[70px] truncate" style={{ color: '#6B7280' }}>{p.name}</div>
+                <div className="text-xl font-black" style={{ color: '#6204BF' }}>{p.score}</div>
+                <div className="text-xs text-gray-400 max-w-[70px] truncate">{p.name}</div>
               </div>
             ))}
           </div>
@@ -231,24 +247,23 @@ function ScreenContent() {
 
   // ── PREGUNTA ACTIVA ─────────────────────────────────────────────────────────
   if (currentQuestion) return (
-    <div className="min-h-screen bg-[#0D0D1A] text-white flex flex-col px-14 py-12">
+    <div className="min-h-screen bg-gray-50 flex flex-col px-14 py-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#6204BF' }}>
-            <span className="text-white font-black">L</span>
-          </div>
-          <span className="font-semibold" style={{ color: '#A78BFA' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'invert(1) brightness(0) saturate(100%) invert(13%) sepia(85%) saturate(5000%) hue-rotate(265deg) brightness(70%)' }} />
+          <span className="font-semibold text-gray-400 text-sm">
             Pregunta {game.current_question_index + 1} / {questions.length}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse" />
-          <span style={{ color: '#A78BFA' }}>{totalAnswers} respondieron</span>
+          <span className="text-gray-400 text-sm">{totalAnswers} respondieron</span>
         </div>
       </div>
 
       <div className="flex-1 flex items-center">
-        <h2 className="text-5xl font-black leading-tight max-w-5xl">{currentQuestion.text}</h2>
+        <h2 className="text-5xl font-black text-gray-900 leading-tight max-w-5xl">{currentQuestion.text}</h2>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mt-8">
@@ -256,8 +271,8 @@ function ScreenContent() {
           const color = OPTION_COLORS[opt]
           const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
           return (
-            <div key={opt} className="flex items-center gap-4 px-6 py-5 rounded-2xl" style={{ background: color.bg }}>
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white font-black text-lg flex-shrink-0">
+            <div key={opt} className="flex items-center gap-4 px-6 py-5 rounded-2xl text-white" style={{ background: color.bg }}>
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-black text-lg flex-shrink-0">
                 {color.label}
               </div>
               <span className="text-xl font-semibold leading-snug">{optText}</span>
