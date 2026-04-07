@@ -20,6 +20,8 @@ function BackstageContent() {
   const [participants, setParticipants] = useState<Participant[]>([])
   const [answers, setAnswers] = useState<Answer[]>([])
   const [loading, setLoading] = useState(false)
+  const baseColor = game?.color || BASE_COLOR
+  const OPTION_COLORS = generateOptionColors(baseColor)
 
   const loadData = useCallback(async () => {
     if (!gameId) return
@@ -82,9 +84,8 @@ function BackstageContent() {
   }
 
   if (!gameId) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-gray-400">Falta gameId en la URL</p></div>
-  if (!game) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} /></div>
+  if (!game) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: baseColor, borderTopColor: 'transparent' }} /></div>
 
-  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
   const answersForCurrentQ = currentQuestion ? answers.filter(a => a.question_id === currentQuestion.id) : []
   const correctForCurrentQ = answersForCurrentQ.filter(a => a.is_correct).length
@@ -100,7 +101,7 @@ function BackstageContent() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#6204BF' }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: baseColor }}>
             <span className="text-white font-bold text-sm">L</span>
           </div>
           <div>
@@ -115,7 +116,7 @@ function BackstageContent() {
           href={`/screen?gameId=${gameId}`}
           target="_blank"
           className="px-4 py-2 rounded-lg text-white text-sm font-medium"
-          style={{ background: '#6204BF' }}
+          style={{ background: baseColor }}
         >
           Ver pantalla ↗
         </a>
@@ -134,7 +135,7 @@ function BackstageContent() {
                 onClick={() => updateGame({ status: 'active', current_question_index: -1, show_results: false })}
                 disabled={loading || questions.length === 0}
                 className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40"
-                style={{ background: '#6204BF' }}
+                style={{ background: baseColor }}
               >
                 <Play size={16} /> Iniciar juego
               </button>
@@ -166,7 +167,7 @@ function BackstageContent() {
                 onClick={handleNextQuestion}
                 disabled={loading}
                 className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40"
-                style={{ background: game.current_question_index + 1 >= questions.length ? '#059669' : '#6204BF' }}
+                style={{ background: game.current_question_index + 1 >= questions.length ? '#059669' : baseColor }}
               >
                 {game.current_question_index + 1 >= questions.length
                   ? <><Trophy size={16} /> Finalizar juego</>
@@ -221,10 +222,10 @@ function BackstageContent() {
                 const isDone = game.current_question_index >= 0 && idx < game.current_question_index
                 return (
                   <div key={q.id} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${isActive ? 'border' : ''}`}
-                    style={isActive ? { background: '#F3E8FF', borderColor: '#6204BF', color: '#6204BF' } : {}}>
+                    style={isActive ? { background: '#F3E8FF', borderColor: baseColor, color: baseColor } : {}}>
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 ${
                       isActive ? 'text-white' : isDone ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'
-                    }`} style={isActive ? { background: '#6204BF' } : {}}>
+                    }`} style={isActive ? { background: baseColor } : {}}>
                       {isDone ? '✓' : idx + 1}
                     </div>
                     <span className={`flex-1 truncate ${isActive ? 'font-semibold' : isDone ? 'text-gray-400' : 'text-gray-500'}`}>{q.text}</span>
@@ -241,7 +242,7 @@ function BackstageContent() {
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F3E8FF' }}>
-                <Users size={18} style={{ color: '#6204BF' }} />
+                <Users size={18} style={{ color: baseColor }} />
               </div>
               <div>
                 <p className="text-2xl font-black text-gray-900">{participants.length}</p>
@@ -305,7 +306,7 @@ function BackstageContent() {
                       {participantsWhoAnswered.has(p.id) ? 'Respondió' : 'Pendiente'}
                     </span>
                   )}
-                  <span className="font-black text-lg" style={{ color: '#6204BF' }}>{p.score} pts</span>
+                  <span className="font-black text-lg" style={{ color: baseColor }}>{p.score} pts</span>
                 </div>
               ))}
               {participants.length === 0 && (
@@ -321,7 +322,7 @@ function BackstageContent() {
 
 export default function BackstagePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: BASE_COLOR, borderTopColor: 'transparent' }} /></div>}>
       <BackstageContent />
     </Suspense>
   )

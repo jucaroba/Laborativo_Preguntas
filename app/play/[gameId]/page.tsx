@@ -22,6 +22,8 @@ export default function PlayPage() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
   const prevQuestionIndexRef = useRef<number>(-99)
   const participantId = typeof window !== 'undefined' ? localStorage.getItem(`participant_${gameId}`) : null
+  const baseColor = game?.color || BASE_COLOR
+  const OPTION_COLORS = generateOptionColors(baseColor)
 
   const loadParticipant = useCallback(async (id: string) => {
     const { data } = await supabase.from('participants').select('*').eq('id', id).single()
@@ -86,11 +88,10 @@ export default function PlayPage() {
 
   if (!game) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} />
+      <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: baseColor, borderTopColor: 'transparent' }} />
     </div>
   )
 
-  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
 
   // Finalizado
@@ -102,7 +103,7 @@ export default function PlayPage() {
       {participant && (
         <div className="bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm">
           <p className="text-gray-400 text-sm mb-1">Tu puntaje final</p>
-          <p className="text-5xl font-black" style={{ color: '#6204BF' }}>{participant.score}</p>
+          <p className="text-5xl font-black" style={{ color: baseColor }}>{participant.score}</p>
           <p className="text-gray-400 text-xs mt-1">puntos</p>
         </div>
       )}
@@ -113,14 +114,14 @@ export default function PlayPage() {
   if (game.status === 'waiting' || game.current_question_index === -1) return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5">
       <div className="flex items-center gap-2.5 mb-8">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#6204BF' }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: baseColor }}>
           <span className="text-white font-black text-lg">L</span>
         </div>
         <span className="text-xl font-black text-gray-900">Laborativo</span>
       </div>
 
       <div className="w-full max-w-xs bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-4" style={{ background: '#F3E8FF', color: '#6204BF' }}>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-4" style={{ background: '#F3E8FF', color: baseColor }}>
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
           Conectado
         </div>
@@ -130,7 +131,7 @@ export default function PlayPage() {
         <div className="mt-6 flex justify-center gap-1">
           {[0, 1, 2].map(i => (
             <span key={i} className="w-2 h-2 rounded-full inline-block"
-              style={{ background: '#6204BF', animation: `pulse 1.4s ease-in-out ${i * 0.2}s infinite`, opacity: 0.5 }} />
+              style={{ background: baseColor, animation: `pulse 1.4s ease-in-out ${i * 0.2}s infinite`, opacity: 0.5 }} />
           ))}
         </div>
       </div>
@@ -164,7 +165,7 @@ export default function PlayPage() {
         {participant && (
           <div className="bg-white border border-gray-200 rounded-2xl p-5 text-center shadow-sm">
             <p className="text-gray-400 text-sm">Tu puntaje actual</p>
-            <p className="text-4xl font-black mt-1" style={{ color: '#6204BF' }}>{participant.score}</p>
+            <p className="text-4xl font-black mt-1" style={{ color: baseColor }}>{participant.score}</p>
             <p className="text-gray-400 text-xs mt-0.5">puntos</p>
           </div>
         )}
@@ -180,7 +181,7 @@ export default function PlayPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: '#6204BF' }}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: baseColor }}>
             <span className="text-white font-black text-xs">L</span>
           </div>
           <span className="text-xs font-semibold text-gray-500">
@@ -188,7 +189,7 @@ export default function PlayPage() {
           </span>
         </div>
         {participant && (
-          <span className="text-sm font-black" style={{ color: '#6204BF' }}>{participant.score} pts</span>
+          <span className="text-sm font-black" style={{ color: baseColor }}>{participant.score} pts</span>
         )}
       </div>
 
@@ -233,7 +234,7 @@ export default function PlayPage() {
       {myAnswer && (
         <div className="mt-6 text-center">
           <div className="inline-flex items-center gap-2 text-gray-400 text-sm">
-            <span className="w-2 h-2 rounded-full inline-block animate-pulse" style={{ background: '#6204BF' }} />
+            <span className="w-2 h-2 rounded-full inline-block animate-pulse" style={{ background: baseColor }} />
             Respuesta registrada, esperando resultados...
           </div>
         </div>

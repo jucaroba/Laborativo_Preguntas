@@ -19,6 +19,8 @@ function ScreenContent() {
   const [participants, setParticipants] = useState<Participant[]>([])
   const [answerCounts, setAnswerCounts] = useState<Record<string, number>>({})
   const [appUrl, setAppUrl] = useState('')
+  const baseColor = game?.color || BASE_COLOR
+  const OPTION_COLORS = generateOptionColors(baseColor)
 
   useEffect(() => { setAppUrl(window.location.origin) }, [])
 
@@ -89,20 +91,18 @@ function ScreenContent() {
 
   if (!game) return (
     <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} />
+      <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: baseColor, borderTopColor: 'transparent' }} />
     </div>
   )
 
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
   const totalAnswers = Object.values(answerCounts).reduce((a, b) => a + b, 0)
-  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
-
   // ── FINALIZADO ──────────────────────────────────────────────────────────────
   if (game.status === 'finished') return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-12">
       <div className="text-7xl mb-4">🏆</div>
       <h1 className="text-5xl font-black text-gray-900 mb-2">¡Resultados finales!</h1>
-      <p className="mb-10 text-lg font-semibold" style={{ color: '#6204BF' }}>{game.name}</p>
+      <p className="mb-10 text-lg font-semibold" style={{ color: baseColor }}>{game.name}</p>
       <div className="w-full max-w-lg space-y-3">
         {participants.slice(0, 10).map((p, idx) => (
           <div key={p.id} className="flex items-center gap-4 px-6 py-4 rounded-2xl border border-gray-200 bg-white">
@@ -110,7 +110,7 @@ function ScreenContent() {
               {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : <span className="text-xl font-black text-gray-400">{idx + 1}</span>}
             </span>
             <span className="flex-1 text-xl font-semibold text-gray-900">{p.name} {p.last_name}</span>
-            <span className="text-2xl font-black" style={{ color: '#6204BF' }}>{p.score} pts</span>
+            <span className="text-2xl font-black" style={{ color: baseColor }}>{p.score} pts</span>
           </div>
         ))}
       </div>
@@ -226,7 +226,7 @@ function ScreenContent() {
           <div className="flex gap-6">
             {participants.slice(0, 8).map((p) => (
               <div key={p.id} className="text-center">
-                <div className="text-xl font-black" style={{ color: '#6204BF' }}>{p.score}</div>
+                <div className="text-xl font-black" style={{ color: baseColor }}>{p.score}</div>
                 <div className="text-xs text-gray-400 max-w-[70px] truncate">{p.name}</div>
               </div>
             ))}
@@ -281,7 +281,7 @@ export default function ScreenPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} />
+        <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: BASE_COLOR, borderTopColor: 'transparent' }} />
       </div>
     }>
       <ScreenContent />
