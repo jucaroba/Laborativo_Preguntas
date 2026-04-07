@@ -54,11 +54,12 @@ function hslToHex(h: number, s: number, l: number): string {
 
 function generateOptionColors(base: string) {
   const [h, s] = hexToHsl(base)
+  const tone = hslToHex(h, s, 32) // tono fijo para todas las opciones
   return {
-    a: { bg: hslToHex(h, s, 62), label: 'A' },   // más claro
-    b: { bg: hslToHex(h, s, 48), label: 'B' },   // medio-claro
-    c: { bg: hslToHex(h, s, 32), label: 'C' },   // medio-oscuro
-    d: { bg: hslToHex(h, s, 18), label: 'D' },   // más oscuro
+    a: { bg: tone, label: 'A' },
+    b: { bg: tone, label: 'B' },
+    c: { bg: tone, label: 'C' },
+    d: { bg: tone, label: 'D' },
   }
 }
 
