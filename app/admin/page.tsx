@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question } from '@/types'
 import { Plus, Trash2, Play, ExternalLink, ChevronUp, ChevronDown, Edit2, Check, X } from 'lucide-react'
@@ -13,6 +13,7 @@ export default function AdminPage() {
   const [games, setGames] = useState<Game[]>([])
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
+  const editFormRef = useRef<HTMLDivElement>(null)
   const [newGameName, setNewGameName] = useState('')
   const [loading, setLoading] = useState(false)
   const [editingQ, setEditingQ] = useState<Partial<Question> | null>(null)
@@ -25,6 +26,12 @@ export default function AdminPage() {
   useEffect(() => {
     if (selectedGame) loadQuestions(selectedGame.id)
   }, [selectedGame])
+
+  useEffect(() => {
+    if (editingQ) {
+      editFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [editingQ])
 
   async function loadGames() {
     const { data } = await supabase
@@ -287,7 +294,7 @@ export default function AdminPage() {
 
               {/* Edit / New question form */}
               {editingQ && (
-                <div className="bg-white border-2 rounded-xl p-5 mb-4" style={{ borderColor: '#6204BF' }}>
+                <div ref={editFormRef} className="bg-white border-2 rounded-xl p-5 mb-4" style={{ borderColor: '#6204BF' }}>
                   <h4 className="font-semibold text-gray-900 mb-4">{isNewQ ? 'Nueva pregunta' : 'Editar pregunta'}</h4>
 
                   <div className="mb-4">
