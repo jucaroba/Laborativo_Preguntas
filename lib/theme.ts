@@ -52,7 +52,7 @@ function hslToHex(h: number, s: number, l: number): string {
 // Mantiene el hue y saturación del color base,
 // variando solo la luminosidad (de claro a oscuro)
 
-function generateOptionColors(base: string) {
+export function generateOptionColors(base: string) {
   const [h, s] = hexToHsl(base)
   const tone = hslToHex(h, s, 32) // tono fijo para todas las opciones
   return {

@@ -7,7 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant, Answer } from '@/types'
 import { ChevronRight, BarChart2, Users, Trophy, Play, Check } from 'lucide-react'
-import { OPTION_COLORS } from '@/lib/theme'
+import { generateOptionColors, BASE_COLOR } from '@/lib/theme'
 
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' }
 
@@ -84,6 +84,7 @@ function BackstageContent() {
   if (!gameId) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-gray-400">Falta gameId en la URL</p></div>
   if (!game) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} /></div>
 
+  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
   const answersForCurrentQ = currentQuestion ? answers.filter(a => a.question_id === currentQuestion.id) : []
   const correctForCurrentQ = answersForCurrentQ.filter(a => a.is_correct).length

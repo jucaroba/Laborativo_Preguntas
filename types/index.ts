@@ -4,6 +4,7 @@ export type AnswerOption = 'a' | 'b' | 'c' | 'd'
 export interface Game {
   id: string
   name: string
+  color?: string
   status: GameStatus
   current_question_index: number // -1 = pantalla QR, 0+ = índice de pregunta
   show_results: boolean          // true = mostrar resultados en pantalla

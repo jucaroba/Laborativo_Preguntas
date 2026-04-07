@@ -18,6 +18,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false)
   const [editingQ, setEditingQ] = useState<Partial<Question> | null>(null)
   const [isNewQ, setIsNewQ] = useState(false)
+  const [editingGameName, setEditingGameName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
 
   useEffect(() => {
     loadGames()
@@ -131,6 +133,25 @@ export default function AdminPage() {
     setQuestions(remaining)
   }
 
+  async function saveGameName() {
+    if (!selectedGame || !nameInput.trim()) return
+    const { data } = await supabase.from('games').update({ name: nameInput.trim() }).eq('id', selectedGame.id).select().single()
+    if (data) {
+      setGames(games.map(g => g.id === data.id ? data : g))
+      setSelectedGame(data)
+    }
+    setEditingGameName(false)
+  }
+
+  async function saveGameColor(color: string) {
+    if (!selectedGame) return
+    const { data } = await supabase.from('games').update({ color }).eq('id', selectedGame.id).select().single()
+    if (data) {
+      setGames(games.map(g => g.id === data.id ? data : g))
+      setSelectedGame(data)
+    }
+  }
+
   async function moveQuestion(index: number, direction: 'up' | 'down') {
     const newQ = [...questions]
     const swapIdx = direction === 'up' ? index - 1 : index + 1
@@ -229,15 +250,47 @@ export default function AdminPage() {
               {/* Game header */}
               <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
                 <div className="flex items-start justify-between">
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900">{selectedGame.name}</h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Estado: <span className="font-medium">
-                        {selectedGame.status === 'waiting' ? 'Esperando' : selectedGame.status === 'active' ? 'En curso' : 'Finalizado'}
-                      </span>
-                      {' · '}
-                      {questions.length} preguntas
-                    </p>
+                  <div className="flex-1 mr-4">
+                    {editingGameName ? (
+                      <div className="flex items-center gap-2 mb-1">
+                        <input
+                          className="text-xl font-bold text-gray-900 border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 flex-1"
+                          value={nameInput}
+                          onChange={e => setNameInput(e.target.value)}
+                          onKeyDown={e => { if (e.key === 'Enter') saveGameName(); if (e.key === 'Escape') setEditingGameName(false) }}
+                          autoFocus
+                        />
+                        <button onClick={saveGameName} className="p-1.5 rounded-lg bg-green-100 text-green-700"><Check size={14} /></button>
+                        <button onClick={() => setEditingGameName(false)} className="p-1.5 rounded-lg bg-gray-100 text-gray-500"><X size={14} /></button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 mb-1">
+                        <h2 className="text-xl font-bold text-gray-900">{selectedGame.name}</h2>
+                        <button onClick={() => { setNameInput(selectedGame.name); setEditingGameName(true) }} className="p-1 rounded text-gray-400 hover:text-gray-700">
+                          <Edit2 size={14} />
+                        </button>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <p className="text-sm text-gray-500">
+                        Estado: <span className="font-medium">
+                          {selectedGame.status === 'waiting' ? 'Esperando' : selectedGame.status === 'active' ? 'En curso' : 'Finalizado'}
+                        </span>
+                        {' · '}
+                        {questions.length} preguntas
+                      </p>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs text-gray-400">Color:</span>
+                        <input
+                          type="color"
+                          value={selectedGame.color || '#6204BF'}
+                          onChange={e => setSelectedGame({ ...selectedGame, color: e.target.value })}
+                          onBlur={e => saveGameColor(e.target.value)}
+                          className="w-7 h-7 rounded-lg cursor-pointer border border-gray-200 p-0.5 bg-white"
+                          title="Color del juego"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <a

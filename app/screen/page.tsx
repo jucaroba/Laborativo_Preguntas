@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant } from '@/types'
 import QRCode from 'react-qr-code'
 
-import { OPTION_COLORS } from '@/lib/theme'
+import { generateOptionColors, BASE_COLOR } from '@/lib/theme'
 
 function ScreenContent() {
   const searchParams = useSearchParams()
@@ -95,6 +95,7 @@ function ScreenContent() {
 
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
   const totalAnswers = Object.values(answerCounts).reduce((a, b) => a + b, 0)
+  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
 
   // ── FINALIZADO ──────────────────────────────────────────────────────────────
   if (game.status === 'finished') return (

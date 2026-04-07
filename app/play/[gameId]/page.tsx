@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant, AnswerOption } from '@/types'
 
-import { OPTION_COLORS } from '@/lib/theme'
+import { generateOptionColors, BASE_COLOR } from '@/lib/theme'
 
 export default function PlayPage() {
   const params = useParams()
@@ -90,6 +90,7 @@ export default function PlayPage() {
     </div>
   )
 
+  const OPTION_COLORS = generateOptionColors(game.color || BASE_COLOR)
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
 
   // Finalizado
