@@ -104,14 +104,9 @@ function ScreenContent() {
       <p className="mb-10 text-lg font-semibold" style={{ color: '#6204BF' }}>{game.name}</p>
       <div className="w-full max-w-lg space-y-3">
         {participants.slice(0, 10).map((p, idx) => (
-          <div key={p.id} className={`flex items-center gap-4 px-6 py-4 rounded-2xl border ${
-            idx === 0 ? 'border-yellow-300 bg-yellow-50' :
-            idx === 1 ? 'border-gray-300 bg-gray-100' :
-            idx === 2 ? 'border-orange-200 bg-orange-50' :
-            'border-gray-200 bg-white'
-          }`}>
-            <span className="text-2xl font-black w-8 text-center">
-              {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
+          <div key={p.id} className="flex items-center gap-4 px-6 py-4 rounded-2xl border border-gray-200 bg-white">
+            <span className="text-4xl w-10 text-center">
+              {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : <span className="text-xl font-black text-gray-400">{idx + 1}</span>}
             </span>
             <span className="flex-1 text-xl font-semibold text-gray-900">{p.name} {p.last_name}</span>
             <span className="text-2xl font-black" style={{ color: '#6204BF' }}>{p.score} pts</span>
