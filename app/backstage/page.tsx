@@ -6,9 +6,10 @@ import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question, Participant, Answer } from '@/types'
-import { ChevronRight, BarChart2, Users, Trophy, Play, RotateCcw } from 'lucide-react'
+import { ChevronRight, BarChart2, Users, Trophy, Play, Check } from 'lucide-react'
 
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' }
+const OPTION_COLORS: Record<string, string> = { a: '#1D4ED8', b: '#B91C1C', c: '#15803D', d: '#D97706' }
 
 function BackstageContent() {
   const searchParams = useSearchParams()
@@ -36,9 +37,7 @@ function BackstageContent() {
 
   useEffect(() => {
     loadData()
-
     if (!gameId) return
-
     const channel = supabase
       .channel('backstage')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'participants', filter: `game_id=eq.${gameId}` }, loadData)
@@ -48,7 +47,6 @@ function BackstageContent() {
         loadData()
       })
       .subscribe()
-
     return () => { supabase.removeChannel(channel) }
   }, [gameId, loadData])
 
@@ -60,27 +58,13 @@ function BackstageContent() {
     setLoading(false)
   }
 
-  async function handleStartGame() {
-    await updateGame({ status: 'active', current_question_index: -1, show_results: false })
-  }
-
-  async function handleStartQuestions() {
-    await updateGame({ current_question_index: 0, show_results: false })
-  }
-
   async function handleShowResults() {
     if (!game || !currentQuestion) return
-    // Award points to participants who answered correctly
-    const correctAnswers = answers.filter(
-      a => a.question_id === currentQuestion.id && a.is_correct
-    )
+    const correctAnswers = answers.filter(a => a.question_id === currentQuestion.id && a.is_correct)
     for (const answer of correctAnswers) {
       const participant = participants.find(p => p.id === answer.participant_id)
       if (participant) {
-        await supabase
-          .from('participants')
-          .update({ score: participant.score + 1000 })
-          .eq('id', participant.id)
+        await supabase.from('participants').update({ score: participant.score + 1000 }).eq('id', participant.id)
       }
     }
     await loadData()
@@ -97,77 +81,71 @@ function BackstageContent() {
     }
   }
 
-  if (!gameId) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
-        <p className="opacity-50">Falta el parámetro gameId en la URL</p>
-      </div>
-    )
-  }
-
-  if (!game) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
+  if (!gameId) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-gray-400">Falta gameId en la URL</p></div>
+  if (!game) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} /></div>
 
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
   const answersForCurrentQ = currentQuestion ? answers.filter(a => a.question_id === currentQuestion.id) : []
   const correctForCurrentQ = answersForCurrentQ.filter(a => a.is_correct).length
-
   const answerCountsByOption = ['a', 'b', 'c', 'd'].reduce((acc, opt) => {
     acc[opt] = answersForCurrentQ.filter(a => a.selected_option === opt).length
     return acc
   }, {} as Record<string, number>)
-
   const participantsWhoAnswered = new Set(answersForCurrentQ.map(a => a.participant_id))
   const participantsPending = participants.filter(p => !participantsWhoAnswered.has(p.id))
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center justify-between">
-        <div>
-          <h1 className="font-bold text-white">🎮 Backstage · {game.name}</h1>
-          <p className="text-xs text-gray-400">
-            {game.status === 'waiting' ? 'Esperando inicio' : game.status === 'active' ? 'Juego en curso' : 'Finalizado'}
-            {' · '}{participants.length} participantes
-          </p>
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#6204BF' }}>
+            <span className="text-white font-bold text-sm">L</span>
+          </div>
+          <div>
+            <h1 className="text-base font-bold text-gray-900">Backstage · {game.name}</h1>
+            <p className="text-xs text-gray-400">
+              {game.status === 'waiting' ? 'Esperando inicio' : game.status === 'active' ? 'En curso' : 'Finalizado'}
+              {' · '}{participants.length} participantes
+            </p>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <a href={`/screen?gameId=${gameId}`} target="_blank" className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-sm font-medium">
-            Ver pantalla ↗
-          </a>
-        </div>
+        <a
+          href={`/screen?gameId=${gameId}`}
+          target="_blank"
+          className="px-4 py-2 rounded-lg text-white text-sm font-medium"
+          style={{ background: '#6204BF' }}
+        >
+          Ver pantalla ↗
+        </a>
       </header>
 
-      <div className="flex h-[calc(100vh-57px)]">
-        {/* Panel izquierdo: controles */}
-        <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col p-4 gap-4">
-          {/* Estado del juego */}
-          <div className="bg-gray-900 rounded-xl p-4">
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3">Control del juego</p>
+      <div className="flex h-[calc(100vh-65px)]">
+        {/* Panel izquierdo */}
+        <aside className="w-80 bg-white border-r border-gray-200 flex flex-col gap-4 p-4 overflow-y-auto">
+
+          {/* Control */}
+          <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Control</p>
 
             {game.status === 'waiting' && (
               <button
-                onClick={handleStartGame}
+                onClick={() => updateGame({ status: 'active', current_question_index: -1, show_results: false })}
                 disabled={loading || questions.length === 0}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40"
                 style={{ background: '#6204BF' }}
               >
-                <Play size={18} /> Iniciar juego
+                <Play size={16} /> Iniciar juego
               </button>
             )}
 
             {game.status === 'active' && game.current_question_index === -1 && (
               <button
-                onClick={handleStartQuestions}
+                onClick={() => updateGame({ current_question_index: 0, show_results: false })}
                 disabled={loading || questions.length === 0}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 disabled:opacity-40 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white bg-green-600 hover:bg-green-500 disabled:opacity-40"
               >
-                <Play size={18} /> Empezar preguntas
+                <Play size={16} /> Empezar preguntas
               </button>
             )}
 
@@ -175,9 +153,9 @@ function BackstageContent() {
               <button
                 onClick={handleShowResults}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 disabled:opacity-40 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white bg-amber-500 hover:bg-amber-400 disabled:opacity-40"
               >
-                <BarChart2 size={18} /> Mostrar resultados
+                <BarChart2 size={16} /> Mostrar resultados
               </button>
             )}
 
@@ -185,20 +163,19 @@ function BackstageContent() {
               <button
                 onClick={handleNextQuestion}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-white disabled:opacity-40"
                 style={{ background: game.current_question_index + 1 >= questions.length ? '#059669' : '#6204BF' }}
               >
-                {game.current_question_index + 1 >= questions.length ? (
-                  <><Trophy size={18} /> Finalizar juego</>
-                ) : (
-                  <><ChevronRight size={18} /> Siguiente pregunta</>
-                )}
+                {game.current_question_index + 1 >= questions.length
+                  ? <><Trophy size={16} /> Finalizar juego</>
+                  : <><ChevronRight size={16} /> Siguiente pregunta</>
+                }
               </button>
             )}
 
             {game.status === 'finished' && (
-              <div className="text-center py-3">
-                <span className="text-2xl">🏆</span>
+              <div className="text-center py-2">
+                <span className="text-3xl">🏆</span>
                 <p className="text-sm text-gray-400 mt-1">Juego finalizado</p>
               </div>
             )}
@@ -206,99 +183,98 @@ function BackstageContent() {
 
           {/* Pregunta actual */}
           {currentQuestion && (
-            <div className="bg-gray-900 rounded-xl p-4">
-              <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-2">
+            <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                 Pregunta {game.current_question_index + 1}/{questions.length}
               </p>
-              <p className="text-sm text-white font-medium leading-snug mb-3">{currentQuestion.text}</p>
-
+              <p className="text-sm font-semibold text-gray-900 mb-3 leading-snug">{currentQuestion.text}</p>
               <div className="space-y-1.5">
                 {(['a', 'b', 'c', 'd'] as const).map(opt => {
                   const isCorrect = currentQuestion.correct_answer === opt
                   const count = answerCountsByOption[opt] || 0
                   const optText = (currentQuestion as unknown as Record<string, string>)[`option_${opt}`]
                   return (
-                    <div
-                      key={opt}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
-                        isCorrect ? 'bg-green-900/50 text-green-300' : 'bg-gray-800 text-gray-400'
-                      }`}
-                    >
-                      <span className="font-bold w-4">{OPTION_LABELS[opt]}</span>
-                      <span className="flex-1 truncate">{optText}</span>
-                      <span className="font-bold">{count}</span>
+                    <div key={opt} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-200'}`}>
+                      <span className="font-bold w-4" style={{ color: isCorrect ? '#059669' : OPTION_COLORS[opt] }}>{OPTION_LABELS[opt]}</span>
+                      <span className={`flex-1 truncate ${isCorrect ? 'text-green-700 font-medium' : 'text-gray-600'}`}>{optText}</span>
+                      {isCorrect && <Check size={12} className="text-green-600" />}
+                      <span className="font-bold text-gray-500">{count}</span>
                     </div>
                   )
                 })}
               </div>
-
-              <div className="mt-3 pt-3 border-t border-gray-700 flex justify-between text-xs text-gray-400">
+              <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between text-xs text-gray-400">
                 <span>{answersForCurrentQ.length}/{participants.length} respondieron</span>
-                <span className="text-green-400">{correctForCurrentQ} correctas</span>
+                <span className="text-green-600 font-medium">{correctForCurrentQ} correctas</span>
               </div>
             </div>
           )}
 
-          {/* Progreso de preguntas */}
-          <div className="bg-gray-900 rounded-xl p-4">
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3">Preguntas</p>
+          {/* Progreso */}
+          <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Progreso</p>
             <div className="space-y-1">
               {questions.map((q, idx) => {
-                const answered = answers.filter(a => a.question_id === q.id).length
                 const isActive = idx === game.current_question_index
-                const isDone = idx < game.current_question_index || (game.current_question_index >= 0 && idx <= game.current_question_index && game.show_results)
+                const isDone = game.current_question_index >= 0 && idx < game.current_question_index
                 return (
-                  <div
-                    key={q.id}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
-                      isActive ? 'bg-purple-900/50 text-purple-300' :
-                      isDone ? 'bg-gray-800/50 text-gray-500' :
-                      'text-gray-500'
-                    }`}
-                  >
-                    <span className="font-bold w-4">{idx + 1}</span>
-                    <span className="flex-1 truncate">{q.text}</span>
-                    {answered > 0 && <span className="text-gray-500">{answered}</span>}
+                  <div key={q.id} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${isActive ? 'border' : ''}`}
+                    style={isActive ? { background: '#F3E8FF', borderColor: '#6204BF', color: '#6204BF' } : {}}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 ${
+                      isActive ? 'text-white' : isDone ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'
+                    }`} style={isActive ? { background: '#6204BF' } : {}}>
+                      {isDone ? '✓' : idx + 1}
+                    </div>
+                    <span className={`flex-1 truncate ${isActive ? 'font-semibold' : isDone ? 'text-gray-400' : 'text-gray-500'}`}>{q.text}</span>
                   </div>
                 )
               })}
             </div>
           </div>
-        </div>
+        </aside>
 
-        {/* Panel derecho: participantes y leaderboard */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            {/* Stats */}
-            <div className="bg-gray-800 rounded-xl p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-900 flex items-center justify-center">
-                <Users size={20} className="text-purple-400" />
+        {/* Panel derecho */}
+        <main className="flex-1 overflow-y-auto p-6">
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F3E8FF' }}>
+                <Users size={18} style={{ color: '#6204BF' }} />
               </div>
               <div>
-                <p className="text-2xl font-black">{participants.length}</p>
+                <p className="text-2xl font-black text-gray-900">{participants.length}</p>
                 <p className="text-xs text-gray-400">Participantes</p>
               </div>
             </div>
-            <div className="bg-gray-800 rounded-xl p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-green-900 flex items-center justify-center">
-                <BarChart2 size={20} className="text-green-400" />
+            <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-50">
+                <Check size={18} className="text-green-600" />
               </div>
               <div>
-                <p className="text-2xl font-black">{answers.length}</p>
+                <p className="text-2xl font-black text-gray-900">{answers.filter(a => a.is_correct).length}</p>
+                <p className="text-xs text-gray-400">Respuestas correctas</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-50">
+                <BarChart2 size={18} className="text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-gray-900">{answers.length}</p>
                 <p className="text-xs text-gray-400">Respuestas totales</p>
               </div>
             </div>
           </div>
 
-          {/* Pendientes de responder (pregunta actual) */}
+          {/* Pendientes */}
           {currentQuestion && !game.show_results && participantsPending.length > 0 && (
-            <div className="bg-amber-900/20 border border-amber-700/40 rounded-xl p-4 mb-6">
-              <p className="text-xs text-amber-400 font-semibold uppercase tracking-wider mb-3">
-                Pendientes de responder ({participantsPending.length})
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+              <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">
+                Pendientes ({participantsPending.length})
               </p>
               <div className="flex flex-wrap gap-2">
                 {participantsPending.map(p => (
-                  <span key={p.id} className="bg-amber-900/40 px-3 py-1 rounded-full text-sm text-amber-300">
+                  <span key={p.id} className="bg-white border border-amber-200 px-3 py-1 rounded-full text-sm text-amber-700">
                     {p.name} {p.last_name}
                   </span>
                 ))}
@@ -307,45 +283,40 @@ function BackstageContent() {
           )}
 
           {/* Leaderboard */}
-          <div>
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3 flex items-center gap-2">
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Trophy size={14} /> Puntaje actual
             </p>
             <div className="space-y-2">
               {participants.map((p, idx) => (
-                <div
-                  key={p.id}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                    idx === 0 ? 'bg-yellow-900/30 border border-yellow-700/40' :
-                    idx === 1 ? 'bg-gray-700/50 border border-gray-600/40' :
-                    idx === 2 ? 'bg-amber-900/30 border border-amber-800/40' :
-                    'bg-gray-800'
-                  }`}
-                >
-                  <span className="text-gray-400 font-bold w-6 text-center text-sm">
+                <div key={p.id} className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${
+                  idx === 0 ? 'border-yellow-200 bg-yellow-50' :
+                  idx === 1 ? 'border-gray-200 bg-gray-50' :
+                  idx === 2 ? 'border-orange-100 bg-orange-50' :
+                  'border-gray-100 bg-white'
+                }`}>
+                  <span className="font-bold w-6 text-center text-sm text-gray-400">
                     {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}
                   </span>
-                  <span className="flex-1 font-medium">{p.name} {p.last_name}</span>
-
-                  {/* Badge: respondió la pregunta actual */}
+                  <span className="flex-1 font-medium text-gray-900">{p.name} {p.last_name}</span>
                   {currentQuestion && (
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      participantsWhoAnswered.has(p.id) ? 'bg-green-900/50 text-green-400' : 'bg-gray-700 text-gray-500'
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                      participantsWhoAnswered.has(p.id)
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-400'
                     }`}>
                       {participantsWhoAnswered.has(p.id) ? 'Respondió' : 'Pendiente'}
                     </span>
                   )}
-
-                  <span className="font-black text-lg" style={{ color: '#A78BFA' }}>{p.score} pts</span>
+                  <span className="font-black text-lg" style={{ color: '#6204BF' }}>{p.score} pts</span>
                 </div>
               ))}
-
               {participants.length === 0 && (
-                <p className="text-gray-500 text-center py-8">Esperando participantes...</p>
+                <p className="text-gray-400 text-center py-8 text-sm">Esperando participantes...</p>
               )}
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   )
@@ -353,11 +324,7 @@ function BackstageContent() {
 
 export default function BackstagePage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6204BF', borderTopColor: 'transparent' }} /></div>}>
       <BackstageContent />
     </Suspense>
   )
