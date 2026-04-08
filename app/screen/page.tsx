@@ -84,13 +84,13 @@ function ScreenContent() {
   }, [game?.current_question_index, questions, game, loadAnswerCounts])
 
   if (!gameId) return (
-    <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center text-white">
+    <div className="min-h-screen bg-[#333333] flex items-center justify-center text-white">
       <p className="opacity-40">Falta el parámetro gameId en la URL</p>
     </div>
   )
 
   if (!game) return (
-    <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center">
+    <div className="min-h-screen bg-[#333333] flex items-center justify-center">
       <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: baseColor, borderTopColor: 'transparent' }} />
     </div>
   )
@@ -121,12 +121,12 @@ function ScreenContent() {
   if (game.current_question_index === -1 || game.status === 'waiting') {
     const joinUrl = `${appUrl}/join/${gameId}`
     return (
-      <div className="min-h-screen bg-[#0D0D1A] flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen flex flex-col items-center justify-center text-white" style={{ background: '#333333' }}>
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain mb-3" />
-          <p className="text-xl font-semibold" style={{ color: '#A78BFA' }}>{game.name}</p>
+          <p className="text-xl font-semibold" style={{ color: baseColor }}>{game.name}</p>
         </div>
 
         {/* QR */}
@@ -138,7 +138,7 @@ function ScreenContent() {
 
         {participants.length > 0 && (
           <div className="text-center">
-            <p className="text-sm mb-3" style={{ color: '#A78BFA' }}>
+            <p className="text-sm mb-3" style={{ color: baseColor }}>
               {participants.length} participante{participants.length !== 1 ? 's' : ''} conectado{participants.length !== 1 ? 's' : ''}
             </p>
             <div className="flex flex-wrap gap-2 justify-center max-w-3xl">
@@ -280,7 +280,7 @@ function ScreenContent() {
 export default function ScreenPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#0D0D1A] flex items-center justify-center">
+      <div className="min-h-screen bg-[#333333] flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: BASE_COLOR, borderTopColor: 'transparent' }} />
       </div>
     }>
