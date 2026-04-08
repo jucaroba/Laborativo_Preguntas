@@ -53,13 +53,11 @@ function hslToHex(h: number, s: number, l: number): string {
 // variando solo la luminosidad (de claro a oscuro)
 
 export function generateOptionColors(base: string) {
-  const [h, s] = hexToHsl(base)
-  const tone = hslToHex(h, s, 32) // tono fijo para todas las opciones
   return {
-    a: { bg: tone, label: 'A' },
-    b: { bg: tone, label: 'B' },
-    c: { bg: tone, label: 'C' },
-    d: { bg: tone, label: 'D' },
+    a: { bg: base, label: 'A' },
+    b: { bg: base, label: 'B' },
+    c: { bg: base, label: 'C' },
+    d: { bg: base, label: 'D' },
   }
 }
 
