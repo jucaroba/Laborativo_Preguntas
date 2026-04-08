@@ -318,19 +318,31 @@ export default function AdminPage() {
                 </div>
 
                 {/* Links útiles */}
-                <div className="mt-4 p-3 bg-gray-50 rounded-lg space-y-1">
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">QR/Join:</span>{' '}
-                    <span className="font-mono">{appUrl}/join/{selectedGame.id}</span>
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">Pantalla:</span>{' '}
-                    <span className="font-mono">{appUrl}/screen?gameId={selectedGame.id}</span>
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    <span className="font-medium">Backstage:</span>{' '}
-                    <span className="font-mono">{appUrl}/backstage?gameId={selectedGame.id}</span>
-                  </p>
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  <a
+                    href={`/join/${selectedGame.id}`}
+                    target="_blank"
+                    className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                    <span className="text-xs font-medium">QR / Join</span>
+                  </a>
+                  <a
+                    href={`/screen?gameId=${selectedGame.id}`}
+                    target="_blank"
+                    className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                    <span className="text-xs font-medium">Pantalla</span>
+                  </a>
+                  <a
+                    href={`/backstage?gameId=${selectedGame.id}`}
+                    target="_blank"
+                    className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                    <span className="text-xs font-medium">Backstage</span>
+                  </a>
                 </div>
               </div>
 
