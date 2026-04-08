@@ -124,7 +124,7 @@ function ScreenContent() {
       <div className="min-h-screen flex flex-col text-white" style={{ background: '#1A1A1A' }}>
         {/* Logo — arriba */}
         <div className="flex flex-col items-center pt-14">
-          <p className="text-xs tracking-widest text-white/40 uppercase mb-1">una experiencia.</p>
+          <p className="text-xs tracking-widest text-white/40 uppercase mb-1">una experiencia</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain" />
         </div>

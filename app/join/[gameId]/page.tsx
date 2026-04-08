@@ -88,7 +88,7 @@ export default function JoinPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5 py-10">
       {/* Logo */}
       <div className="flex flex-col items-center mb-8">
-        <p className="text-xs tracking-widest text-gray-400 uppercase mb-1">una experiencia.</p>
+        <p className="text-xs tracking-widest text-gray-400 uppercase mb-1">una experiencia</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo-blanco.png" alt="Laborativo" className="h-10 object-contain" style={{ filter: 'brightness(0)' }} />
       </div>
