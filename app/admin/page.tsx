@@ -195,7 +195,7 @@ export default function AdminPage() {
               <button
                 onClick={createGame}
                 disabled={loading || !newGameName.trim()}
-                className="px-3 py-2 rounded-lg bg-white text-sm font-medium disabled:opacity-50"
+                className="px-3 py-2 rounded-lg bg-white text-sm font-medium"
                 style={{ border: '3px solid #6204BF', color: '#6204BF' }}
               >
                 <Plus size={16} />
