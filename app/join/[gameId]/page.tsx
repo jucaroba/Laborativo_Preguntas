@@ -106,7 +106,8 @@ export default function JoinPage() {
               type="text"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:border-transparent bg-gray-50"
               style={{ '--tw-ring-color': baseColor } as React.CSSProperties}
-              placeholder="Tu nombre y apellido"
+              placeholder=""
+              autoFocus
               value={fullName}
               onChange={e => setFullName(e.target.value)}
               autoComplete="name"
