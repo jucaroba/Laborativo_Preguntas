@@ -271,26 +271,25 @@ export default function AdminPage() {
                         </button>
                       </div>
                     )}
-                    <div className="flex items-center gap-3 flex-wrap">
+                    <div className="flex items-center gap-1.5">
                       <p className="text-sm text-gray-500">
                         Estado: <span className="font-medium">
                           {selectedGame.status === 'waiting' ? 'Esperando' : selectedGame.status === 'active' ? 'En curso' : 'Finalizado'}
                         </span>
                         {' · '}
                         {questions.length} preguntas
+                        {' · '}
+                        Color:
                       </p>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs text-gray-400">Color:</span>
-                        <label className="relative w-7 h-7 rounded-lg cursor-pointer overflow-hidden border border-gray-200 block flex-shrink-0" style={{ background: selectedGame.color || '#6204BF' }} title="Color del juego">
-                          <input
-                            type="color"
-                            value={selectedGame.color || '#6204BF'}
-                            onChange={e => setSelectedGame({ ...selectedGame, color: e.target.value })}
-                            onBlur={e => saveGameColor(e.target.value)}
-                            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                          />
-                        </label>
-                      </div>
+                      <label className="relative w-5 h-5 rounded-md cursor-pointer overflow-hidden block flex-shrink-0" style={{ background: selectedGame.color || '#6204BF' }} title="Color del juego">
+                        <input
+                          type="color"
+                          value={selectedGame.color || '#6204BF'}
+                          onChange={e => setSelectedGame({ ...selectedGame, color: e.target.value })}
+                          onBlur={e => saveGameColor(e.target.value)}
+                          className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                        />
+                      </label>
                     </div>
                   </div>
                   <div className="flex gap-2">
