@@ -85,12 +85,12 @@ export default function JoinPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5 py-10">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center px-5 pt-14 pb-10">
       {/* Logo */}
-      <div className="flex flex-col items-center mb-8">
+      <div className="flex flex-col items-center mb-10">
         <p className="text-xs tracking-widest text-gray-400 uppercase mb-1">una experiencia</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo-blanco.png" alt="Laborativo" className="h-10 object-contain" style={{ filter: 'brightness(0)' }} />
+        <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain" style={{ filter: 'brightness(0)' }} />
       </div>
 
       <div className="w-full max-w-sm bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
