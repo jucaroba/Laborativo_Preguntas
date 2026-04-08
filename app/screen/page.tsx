@@ -99,18 +99,23 @@ function ScreenContent() {
   const totalAnswers = Object.values(answerCounts).reduce((a, b) => a + b, 0)
   // ── FINALIZADO ──────────────────────────────────────────────────────────────
   if (game.status === 'finished') return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-12">
-      <div className="text-7xl mb-4">🏆</div>
-      <h1 className="text-5xl font-black text-gray-900 mb-2">¡Resultados finales!</h1>
-      <p className="mb-10 text-lg font-semibold" style={{ color: baseColor }}>{game.name}</p>
-      <div className="w-full max-w-lg space-y-3">
-        {participants.slice(0, 10).map((p, idx) => (
+    <div className="min-h-screen bg-gray-50 flex px-14 py-12 gap-16">
+      {/* Columna izquierda */}
+      <div className="flex flex-col justify-center w-80 flex-shrink-0">
+        <div className="text-8xl mb-6">🏆</div>
+        <h1 className="text-5xl font-black text-gray-900 leading-tight mb-3">¡Resultados finales!</h1>
+        <p className="text-2xl font-semibold" style={{ color: baseColor }}>{game.name}</p>
+      </div>
+
+      {/* Columna derecha */}
+      <div className="flex-1 flex flex-col justify-center space-y-3 overflow-y-auto">
+        {participants.map((p, idx) => (
           <div key={p.id} className="flex items-center gap-4 px-6 py-4 rounded-2xl border border-gray-200 bg-white">
-            <span className="text-4xl w-10 text-center">
-              {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : <span className="text-xl font-black text-gray-400">{idx + 1}</span>}
+            <span className="text-3xl w-10 text-center flex-shrink-0">
+              {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : <span className="text-lg font-black text-gray-400">{idx + 1}</span>}
             </span>
-            <span className="flex-1 text-xl font-semibold text-gray-900">{p.name} {p.last_name}</span>
-            <span className="text-2xl font-black" style={{ color: baseColor }}>{p.score} pts</span>
+            <span className="flex-1 text-lg font-semibold text-gray-900">{p.name} {p.last_name}</span>
+            <span className="text-xl font-black" style={{ color: baseColor }}>{p.score} pts</span>
           </div>
         ))}
       </div>

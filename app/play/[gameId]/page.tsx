@@ -17,6 +17,7 @@ export default function PlayPage() {
   const [game, setGame] = useState<Game | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
   const [participant, setParticipant] = useState<Participant | null>(null)
+  const [participants, setParticipants] = useState<Participant[]>([])
   const [myAnswer, setMyAnswer] = useState<AnswerOption | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
@@ -33,19 +34,25 @@ export default function PlayPage() {
   useEffect(() => {
     if (!participantId) { router.replace(`/join/${gameId}`); return }
     async function init() {
-      const [gameRes, questionsRes] = await Promise.all([
+      const [gameRes, questionsRes, participantsRes] = await Promise.all([
         supabase.from('games').select('*').eq('id', gameId).single(),
         supabase.from('questions').select('*').eq('game_id', gameId).order('order_index'),
+        supabase.from('participants').select('*').eq('game_id', gameId).order('score', { ascending: false }),
       ])
       if (gameRes.data) setGame(gameRes.data)
       if (questionsRes.data) setQuestions(questionsRes.data)
+      if (participantsRes.data) setParticipants(participantsRes.data)
       loadParticipant(participantId!)
     }
     init()
     const channel = supabase
       .channel('play')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'games', filter: `id=eq.${gameId}` }, payload => {
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'games', filter: `id=eq.${gameId}` }, async payload => {
         setGame(payload.new as Game)
+        if (payload.new.status === 'finished') {
+          const { data } = await supabase.from('participants').select('*').eq('game_id', gameId).order('score', { ascending: false })
+          if (data) setParticipants(data)
+        }
       })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
@@ -95,20 +102,29 @@ export default function PlayPage() {
   const currentQuestion = game.current_question_index >= 0 ? questions[game.current_question_index] : null
 
   // Finalizado
-  if (game.status === 'finished') return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5 text-center">
-      <span className="text-6xl mb-4">🏆</span>
-      <h1 className="text-2xl font-black text-gray-900 mb-2">¡Juego terminado!</h1>
-      <p className="text-gray-400 text-sm mb-8">Mira la pantalla para ver los resultados finales</p>
-      {participant && (
-        <div className="bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm">
-          <p className="text-gray-400 text-sm mb-1">Tu puntaje final</p>
-          <p className="text-5xl font-black" style={{ color: baseColor }}>{participant.score}</p>
-          <p className="text-gray-400 text-xs mt-1">puntos</p>
-        </div>
-      )}
-    </div>
-  )
+  if (game.status === 'finished') {
+    const myRank = participant ? participants.findIndex(p => p.id === participant.id) + 1 : 0
+    const podium = myRank === 1 ? '🥇' : myRank === 2 ? '🥈' : myRank === 3 ? '🥉' : null
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5 text-center">
+        <span className="text-6xl mb-4">🏆</span>
+        <h1 className="text-2xl font-black text-gray-900 mb-2">¡Juego terminado!</h1>
+        {participant && (
+          <div className="bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm mt-4 w-full max-w-xs">
+            {podium && <p className="text-5xl mb-2">{podium}</p>}
+            {myRank > 0 && (
+              <p className="text-gray-400 text-sm mb-3">
+                {podium ? `¡Quedaste en el puesto ${myRank}!` : `Puesto ${myRank}`}
+              </p>
+            )}
+            <p className="text-gray-400 text-sm mb-1">Tu puntaje final</p>
+            <p className="text-5xl font-black" style={{ color: baseColor }}>{participant.score}</p>
+            <p className="text-gray-400 text-xs mt-1">puntos</p>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   // Esperando
   if (game.status === 'waiting' || game.current_question_index === -1) return (
