@@ -144,7 +144,7 @@ function ScreenContent() {
               </p>
               <div className="flex flex-wrap gap-2 justify-center max-w-3xl">
                 {participants.map(p => (
-                  <span key={p.id} className="px-3 py-1 rounded-full text-sm font-medium text-white/60" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                  <span key={p.id} className="px-3 py-1 rounded-full text-sm font-medium text-gray-500" style={{ background: 'white', border: '1px solid #e5e7eb' }}>
                     {p.name} {p.last_name}
                   </span>
                 ))}
