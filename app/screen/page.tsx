@@ -84,13 +84,13 @@ function ScreenContent() {
   }, [game?.current_question_index, questions, game, loadAnswerCounts])
 
   if (!gameId) return (
-    <div className="min-h-screen bg-[#333333] flex items-center justify-center text-white">
+    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center text-white">
       <p className="opacity-40">Falta el parámetro gameId en la URL</p>
     </div>
   )
 
   if (!game) return (
-    <div className="min-h-screen bg-[#333333] flex items-center justify-center">
+    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
       <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: baseColor, borderTopColor: 'transparent' }} />
     </div>
   )
@@ -121,7 +121,7 @@ function ScreenContent() {
   if (game.current_question_index === -1 || game.status === 'waiting') {
     const joinUrl = `${appUrl}/join/${gameId}`
     return (
-      <div className="min-h-screen flex flex-col text-white" style={{ background: '#333333' }}>
+      <div className="min-h-screen flex flex-col text-white" style={{ background: '#1A1A1A' }}>
         {/* Logo — arriba */}
         <div className="flex flex-col items-center pt-14">
           <p className="text-xs tracking-widest text-white/40 uppercase mb-1">una experiencia.</p>
@@ -131,7 +131,7 @@ function ScreenContent() {
 
         {/* Bloque central — nombre + QR + texto */}
         <div className="flex-1 flex flex-col items-center justify-center">
-          <p className="text-3xl font-bold mb-8" style={{ color: baseColor }}>{game.name}</p>
+          <p className="text-6xl font-bold mb-8" style={{ color: baseColor }}>{game.name}</p>
           <div className="bg-white p-5 rounded-3xl shadow-2xl mb-8">
             <QRCode value={joinUrl} size={312} />
           </div>
@@ -282,7 +282,7 @@ function ScreenContent() {
 export default function ScreenPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#333333] flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: BASE_COLOR, borderTopColor: 'transparent' }} />
       </div>
     }>
