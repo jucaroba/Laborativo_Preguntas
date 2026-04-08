@@ -179,7 +179,7 @@ function ScreenContent() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'invert(1) brightness(0) saturate(100%) invert(13%) sepia(85%) saturate(5000%) hue-rotate(265deg) brightness(70%)' }} />
+            <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'brightness(0)' }} />
             <span className="font-semibold text-gray-400 text-sm">
               Pregunta {game.current_question_index + 1} / {questions.length}
             </span>
@@ -242,7 +242,7 @@ function ScreenContent() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'invert(1) brightness(0) saturate(100%) invert(13%) sepia(85%) saturate(5000%) hue-rotate(265deg) brightness(70%)' }} />
+          <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'brightness(0)' }} />
           <span className="font-semibold text-gray-400 text-sm">
             Pregunta {game.current_question_index + 1} / {questions.length}
           </span>
