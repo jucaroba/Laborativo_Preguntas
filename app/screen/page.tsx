@@ -179,14 +179,14 @@ function ScreenContent() {
       <div className="min-h-screen bg-gray-50 flex flex-col px-14 py-10">
         {/* Header claro */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'brightness(0)' }} />
-            <span className="font-semibold text-gray-400 text-sm">
+            <img src="/logo-blanco.png" alt="Laborativo" className="h-11 object-contain" style={{ filter: 'brightness(0)' }} />
+            <span className="font-semibold text-gray-400 text-base">
               Pregunta {game.current_question_index + 1} / {questions.length}
             </span>
           </div>
-          <span className="text-gray-400 text-sm">{totalAnswers} respuestas</span>
+          <span className="text-gray-400 text-base">{totalAnswers} respuestas</span>
         </div>
 
         <h2 className="text-4xl font-black text-gray-900 mb-8 leading-tight max-w-4xl">{currentQuestion.text}</h2>
@@ -242,16 +242,16 @@ function ScreenContent() {
   if (currentQuestion) return (
     <div className="min-h-screen bg-gray-50 flex flex-col px-14 py-10">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-blanco.png" alt="Laborativo" className="h-8 object-contain" style={{ filter: 'brightness(0)' }} />
-          <span className="font-semibold text-gray-400 text-sm">
+          <img src="/logo-blanco.png" alt="Laborativo" className="h-11 object-contain" style={{ filter: 'brightness(0)' }} />
+          <span className="font-semibold text-gray-400 text-base">
             Pregunta {game.current_question_index + 1} / {questions.length}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse" />
-          <span className="text-gray-400 text-sm">{totalAnswers} respondieron</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-green-400 inline-block animate-pulse" />
+          <span className="text-gray-400 text-base">{totalAnswers} respondieron</span>
         </div>
       </div>
 
