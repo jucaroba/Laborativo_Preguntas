@@ -281,14 +281,15 @@ export default function AdminPage() {
                       </p>
                       <div className="flex items-center gap-1.5">
                         <span className="text-xs text-gray-400">Color:</span>
-                        <input
-                          type="color"
-                          value={selectedGame.color || '#6204BF'}
-                          onChange={e => setSelectedGame({ ...selectedGame, color: e.target.value })}
-                          onBlur={e => saveGameColor(e.target.value)}
-                          className="w-7 h-7 rounded-lg cursor-pointer border border-gray-200 p-0.5 bg-white"
-                          title="Color del juego"
-                        />
+                        <label className="relative w-7 h-7 rounded-lg cursor-pointer overflow-hidden border border-gray-200 block flex-shrink-0" style={{ background: selectedGame.color || '#6204BF' }} title="Color del juego">
+                          <input
+                            type="color"
+                            value={selectedGame.color || '#6204BF'}
+                            onChange={e => setSelectedGame({ ...selectedGame, color: e.target.value })}
+                            onBlur={e => saveGameColor(e.target.value)}
+                            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                          />
+                        </label>
                       </div>
                     </div>
                   </div>
