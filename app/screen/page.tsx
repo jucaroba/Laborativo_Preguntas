@@ -182,7 +182,7 @@ function ScreenContent() {
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo-blanco.png" alt="Laborativo" className="h-11 object-contain" style={{ filter: 'brightness(0)' }} />
-            <span className="font-semibold text-gray-400 text-base">
+            <span className="text-gray-400 text-base">
               Pregunta {game.current_question_index + 1} / {questions.length}
             </span>
           </div>
@@ -245,7 +245,7 @@ function ScreenContent() {
         <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-blanco.png" alt="Laborativo" className="h-11 object-contain" style={{ filter: 'brightness(0)' }} />
-          <span className="font-semibold text-gray-400 text-base">
+          <span className="text-gray-400 text-base">
             Pregunta {game.current_question_index + 1} / {questions.length}
           </span>
         </div>
