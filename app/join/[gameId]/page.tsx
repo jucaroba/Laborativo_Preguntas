@@ -94,7 +94,7 @@ export default function JoinPage() {
 
       <div className="w-full max-w-sm bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
         <div className="mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-3" style={{ background: '#F3E8FF', color: '#6204BF' }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-3" style={{ background: '#F5F5F5', color: '#6204BF' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
             En vivo
           </div>

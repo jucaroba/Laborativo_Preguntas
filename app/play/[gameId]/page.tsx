@@ -121,7 +121,7 @@ export default function PlayPage() {
       </div>
 
       <div className="w-full max-w-xs bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-4" style={{ background: '#F3E8FF', color: baseColor }}>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-4" style={{ background: '#F5F5F5', color: baseColor }}>
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
           Conectado
         </div>

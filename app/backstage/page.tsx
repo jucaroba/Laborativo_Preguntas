@@ -222,7 +222,7 @@ function BackstageContent() {
                 const isDone = game.current_question_index >= 0 && idx < game.current_question_index
                 return (
                   <div key={q.id} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${isActive ? 'border' : ''}`}
-                    style={isActive ? { background: '#F3E8FF', borderColor: baseColor, color: baseColor } : {}}>
+                    style={isActive ? { background: '#F5F5F5', borderColor: baseColor, color: baseColor } : {}}>
                     <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 ${
                       isActive ? 'text-white' : isDone ? 'bg-green-100 text-green-600' : 'bg-gray-200 text-gray-400'
                     }`} style={isActive ? { background: baseColor } : {}}>
@@ -241,7 +241,7 @@ function BackstageContent() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F3E8FF' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#F5F5F5' }}>
                 <Users size={18} style={{ color: baseColor }} />
               </div>
               <div>
