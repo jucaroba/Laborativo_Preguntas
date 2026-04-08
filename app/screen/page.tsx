@@ -121,36 +121,37 @@ function ScreenContent() {
   if (game.current_question_index === -1 || game.status === 'waiting') {
     const joinUrl = `${appUrl}/join/${gameId}`
     return (
-      <div className="min-h-screen flex flex-col items-center text-white pt-16" style={{ background: '#333333' }}>
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-12">
-          <p className="text-xs tracking-widest text-white/40 uppercase mb-3">una experiencia.</p>
+      <div className="min-h-screen flex flex-col text-white" style={{ background: '#333333' }}>
+        {/* Logo — arriba */}
+        <div className="flex flex-col items-center pt-14">
+          <p className="text-xs tracking-widest text-white/40 uppercase mb-1">una experiencia.</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain mb-3" />
-          <p className="text-xl font-semibold" style={{ color: baseColor }}>{game.name}</p>
+          <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain" />
         </div>
 
-        {/* QR */}
-        <div className="bg-white p-5 rounded-3xl shadow-2xl mb-8">
-          <QRCode value={joinUrl} size={312} />
-        </div>
-
-        <p className="text-2xl font-bold mb-10">Escanea para unirte</p>
-
-        {participants.length > 0 && (
-          <div className="text-center">
-            <p className="text-sm mb-3" style={{ color: baseColor }}>
-              {participants.length} participante{participants.length !== 1 ? 's' : ''} conectado{participants.length !== 1 ? 's' : ''}
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center max-w-3xl">
-              {participants.map(p => (
-                <span key={p.id} className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ background: '#1F1F2E', border: '1px solid #374151' }}>
-                  {p.name} {p.last_name}
-                </span>
-              ))}
-            </div>
+        {/* Bloque central — nombre + QR + texto */}
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <p className="text-3xl font-bold mb-8" style={{ color: baseColor }}>{game.name}</p>
+          <div className="bg-white p-5 rounded-3xl shadow-2xl mb-8">
+            <QRCode value={joinUrl} size={312} />
           </div>
-        )}
+          <p className="text-2xl font-bold">Escanea para unirte</p>
+
+          {participants.length > 0 && (
+            <div className="text-center mt-8">
+              <p className="text-sm mb-3" style={{ color: baseColor }}>
+                {participants.length} participante{participants.length !== 1 ? 's' : ''} conectado{participants.length !== 1 ? 's' : ''}
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center max-w-3xl">
+                {participants.map(p => (
+                  <span key={p.id} className="px-3 py-1 rounded-full text-sm font-medium text-white" style={{ background: '#1F1F2E', border: '1px solid #374151' }}>
+                    {p.name} {p.last_name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     )
   }
