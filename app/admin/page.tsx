@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Game, Question } from '@/types'
-import { Plus, Trash2, Play, ExternalLink, ChevronUp, ChevronDown, Edit2, Check, X } from 'lucide-react'
+import { Plus, Trash2, ExternalLink, ChevronUp, ChevronDown, Edit2, Check, X } from 'lucide-react'
 
 const OPTION_LABELS: Record<string, string> = { a: 'A', b: 'B', c: 'C', d: 'D' }
 
@@ -292,20 +292,6 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <a
-                      href={`/screen?gameId=${selectedGame.id}`}
-                      target="_blank"
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      <ExternalLink size={14} /> Pantalla
-                    </a>
-                    <a
-                      href={`/backstage?gameId=${selectedGame.id}`}
-                      target="_blank"
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      <Play size={14} /> Backstage
-                    </a>
                     <button
                       onClick={() => resetGame(selectedGame)}
                       className="px-3 py-2 rounded-lg border border-red-200 text-sm text-red-600 hover:bg-red-50"
