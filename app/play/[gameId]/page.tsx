@@ -129,7 +129,7 @@ export default function PlayPage() {
 
   // Esperando
   if (game.status === 'waiting' || game.current_question_index === -1) return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center px-5 pt-14">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5">
       <div className="flex flex-col items-center mb-10">
         <p className="text-xs tracking-widest text-gray-400 uppercase mb-1">una experiencia</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
