@@ -66,7 +66,7 @@ function BackstageContent() {
     for (const answer of correctAnswers) {
       const participant = participants.find(p => p.id === answer.participant_id)
       if (participant) {
-        await supabase.from('participants').update({ score: participant.score + 1000 }).eq('id', participant.id)
+        await supabase.from('participants').update({ score: participant.score + 10 }).eq('id', participant.id)
       }
     }
     await loadData()
