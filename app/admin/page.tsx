@@ -323,7 +323,7 @@ export default function AdminPage() {
                     className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
                   >
                     <ExternalLink size={16} />
-                    <span className="text-xs font-medium">QR / Join</span>
+                    <span className="text-xs font-medium">Registro</span>
                   </a>
                   <a
                     href={`/screen?gameId=${selectedGame.id}`}
@@ -331,7 +331,7 @@ export default function AdminPage() {
                     className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
                   >
                     <ExternalLink size={16} />
-                    <span className="text-xs font-medium">Pantalla</span>
+                    <span className="text-xs font-medium">QR / Pantalla</span>
                   </a>
                   <a
                     href={`/backstage?gameId=${selectedGame.id}`}
@@ -339,7 +339,7 @@ export default function AdminPage() {
                     className="flex flex-col items-center gap-1 p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
                   >
                     <ExternalLink size={16} />
-                    <span className="text-xs font-medium">Backstage</span>
+                    <span className="text-xs font-medium">Consola</span>
                   </a>
                 </div>
               </div>
