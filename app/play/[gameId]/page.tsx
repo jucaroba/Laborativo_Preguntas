@@ -117,9 +117,10 @@ export default function PlayPage() {
                 {podium ? `¡Quedaste en el puesto ${myRank}!` : `Puesto ${myRank}`}
               </p>
             )}
-            <p className="text-gray-400 text-sm mb-1">Tu puntaje final</p>
-            <p className="text-5xl font-black" style={{ color: baseColor }}>{participant.score}</p>
-            <p className="text-gray-400 text-xs mt-1">puntos</p>
+            <p className="text-gray-400 text-sm mb-1">Puntaje final</p>
+            <p className="text-5xl font-black" style={{ color: baseColor }}>
+              {participant.score} <span className="text-2xl font-semibold text-gray-300">/ {questions.length * 10}</span>
+            </p>
           </div>
         )}
       </div>
