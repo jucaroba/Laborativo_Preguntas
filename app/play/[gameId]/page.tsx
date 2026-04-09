@@ -129,12 +129,11 @@ export default function PlayPage() {
 
   // Esperando
   if (game.status === 'waiting' || game.current_question_index === -1) return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5">
-      <div className="flex items-center gap-2.5 mb-8">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: baseColor }}>
-          <span className="text-white font-black text-lg">L</span>
-        </div>
-        <span className="text-xl font-black text-gray-900">Laborativo</span>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center px-5 pt-14">
+      <div className="flex flex-col items-center mb-10">
+        <p className="text-xs tracking-widest text-gray-400 uppercase mb-1">una experiencia</p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo-blanco.png" alt="Laborativo" className="h-14 object-contain" style={{ filter: 'brightness(0)' }} />
       </div>
 
       <div className="w-full max-w-xs bg-white border border-gray-200 rounded-2xl p-6 shadow-sm text-center">
