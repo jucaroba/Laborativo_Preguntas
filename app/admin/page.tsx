@@ -169,13 +169,10 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#6204BF' }}>
-            <span className="text-white font-bold text-sm">L</span>
-          </div>
-          <h1 className="text-lg font-bold text-gray-900">Laborativo Preguntas · Admin</h1>
-        </div>
+      <header className="px-6 py-3 flex items-center gap-3" style={{ background: '#6204BF' }}>
+        <img src="/logo-blanco.png" alt="Laborativo" style={{ height: 28, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1.1rem', fontWeight: 300 }}>/</span>
+        <span style={{ color: '#fff', fontSize: '0.92rem', fontWeight: 600, letterSpacing: '0.01em' }}>Preguntas · Admin</span>
       </header>
 
       <div className="flex h-[calc(100vh-65px)]">
