@@ -192,8 +192,8 @@ export default function AdminPage() {
               />
               <button
                 onClick={createGame}
-                disabled={loading || !newGameName.trim()}
-                style={{ width: 32, height: 32, background: '#6204BF', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: loading || !newGameName.trim() ? 0.5 : 1, transition: 'background 0.2s' }}
+                disabled={loading}
+                style={{ width: 36, alignSelf: 'stretch', background: '#6204BF', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.background = '#5203A3'}
                 onMouseLeave={e => e.currentTarget.style.background = '#6204BF'}
               >
