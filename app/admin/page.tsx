@@ -178,11 +178,13 @@ export default function AdminPage() {
       <div className="flex h-[calc(100vh-65px)]">
         {/* Sidebar — lista de juegos */}
         <aside className="w-72 bg-white border-r border-gray-200 flex flex-col">
-          <div className="px-3 pt-3 pb-2">
-            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Nuevo juego</p>
-            <div className="flex gap-1.5">
+          <div style={{ padding: '0.9rem 0.9rem 0.5rem' }}>
+            <p style={{ fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#A1A1AA', fontWeight: 600, marginBottom: '0.5rem' }}>Nuevo juego</p>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
               <input
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#6204BF] min-w-0 transition-colors"
+                style={{ flex: 1, border: '1.5px solid #E4E4E7', borderRadius: 8, padding: '0.45rem 0.65rem', fontSize: '0.85rem', fontFamily: 'inherit', outline: 'none', color: '#18181B', minWidth: 0, transition: 'border 0.2s' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#6204BF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E4E4E7'}
                 placeholder="Nombre de la sesión"
                 value={newGameName}
                 onChange={e => setNewGameName(e.target.value)}
@@ -191,8 +193,9 @@ export default function AdminPage() {
               <button
                 onClick={createGame}
                 disabled={loading || !newGameName.trim()}
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-xl font-light disabled:opacity-50 transition-opacity"
-                style={{ background: '#6204BF' }}
+                style={{ width: 32, height: 32, background: '#6204BF', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: loading || !newGameName.trim() ? 0.5 : 1, transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#5203A3'}
+                onMouseLeave={e => e.currentTarget.style.background = '#6204BF'}
               >
                 <Plus size={16} />
               </button>
@@ -204,16 +207,14 @@ export default function AdminPage() {
               <div
                 key={game.id}
                 onClick={() => setSelectedGame(game)}
-                className={`group flex items-center justify-between px-3 py-3 rounded-lg cursor-pointer transition-colors ${
-                  selectedGame?.id === game.id
-                    ? 'text-white'
-                    : 'hover:bg-gray-100 text-gray-700'
-                }`}
-                style={selectedGame?.id === game.id ? { background: '#6204BF' } : {}}
+                className="group flex items-center rounded-lg cursor-pointer transition-colors"
+                style={{ padding: '0.6rem 0.75rem', gap: '0.55rem', marginBottom: '0.2rem', background: selectedGame?.id === game.id ? '#6204BF' : 'transparent', position: 'relative' }}
+                onMouseEnter={e => { if (selectedGame?.id !== game.id) e.currentTarget.style.background = '#F4F4F5' }}
+                onMouseLeave={e => { if (selectedGame?.id !== game.id) e.currentTarget.style.background = 'transparent' }}
               >
-                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: game.color || '#6204BF' }} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate">{game.name}</p>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: game.color || '#6204BF', display: 'inline-block' }} />
+                <div style={{ flex: 1, minWidth: 0, paddingRight: '1.2rem' }}>
+                  <p style={{ fontSize: '0.88rem', fontWeight: 600, color: selectedGame?.id === game.id ? '#fff' : '#18181B', lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{game.name}</p>
                 </div>
                 <button
                   onClick={e => { e.stopPropagation(); deleteGame(game.id) }}
