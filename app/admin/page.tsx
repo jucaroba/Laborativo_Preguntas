@@ -178,13 +178,12 @@ export default function AdminPage() {
       <div className="flex h-[calc(100vh-65px)]">
         {/* Sidebar — lista de juegos */}
         <aside className="w-72 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-4 border-b border-gray-200">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Nuevo juego</p>
-            <div className="flex gap-2">
+          <div className="px-3 pt-3 pb-2">
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Nuevo juego</p>
+            <div className="flex gap-1.5">
               <input
-                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
-                style={{ '--tw-ring-color': '#6204BF' } as React.CSSProperties}
-                placeholder="Nombre del juego"
+                className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#6204BF] min-w-0 transition-colors"
+                placeholder="Nombre de la sesión"
                 value={newGameName}
                 onChange={e => setNewGameName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && createGame()}
@@ -192,7 +191,8 @@ export default function AdminPage() {
               <button
                 onClick={createGame}
                 disabled={loading || !newGameName.trim()}
-                className="px-3 py-2 rounded-lg bg-white text-sm font-medium border border-[#6204BF] text-[#6204BF]"
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-xl font-light disabled:opacity-50 transition-opacity"
+                style={{ background: '#6204BF' }}
               >
                 <Plus size={16} />
               </button>
@@ -211,11 +211,9 @@ export default function AdminPage() {
                 }`}
                 style={selectedGame?.id === game.id ? { background: '#6204BF' } : {}}
               >
+                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: game.color || '#6204BF' }} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{game.name}</p>
-                  <p className={`text-xs mt-0.5 ${selectedGame?.id === game.id ? 'text-purple-200' : 'text-gray-400'}`}>
-                    {game.status === 'waiting' ? 'Esperando' : game.status === 'active' ? 'En curso' : 'Finalizado'}
-                  </p>
+                  <p className="text-sm font-semibold truncate">{game.name}</p>
                 </div>
                 <button
                   onClick={e => { e.stopPropagation(); deleteGame(game.id) }}
