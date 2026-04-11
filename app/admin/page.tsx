@@ -170,7 +170,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="px-6 py-3 flex items-center gap-3" style={{ background: '#6204BF' }}>
-        <img src="/logo-blanco.png" alt="Laborativo" style={{ height: 28, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        <img src="/logo-blanco.png" alt="Laborativo" style={{ height: 44, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
         <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1.1rem', fontWeight: 300 }}>/</span>
         <span style={{ color: '#fff', fontSize: '0.92rem', fontWeight: 600, letterSpacing: '0.01em' }}>Preguntas · Admin</span>
       </header>
